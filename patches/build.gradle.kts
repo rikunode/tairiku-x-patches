@@ -2,12 +2,12 @@ group = "app.ahmedyarub"
 
 patches {
     about {
-        name = "Ahmed Yarub's Patches"
-        description = "Personal patches for use with Morphe"
-        source = "git@github.com:ahmedyarub/morphe-patches.git"
-        author = "ahmedyarub"
-        contact = "na"
-        website = "na"
+        name = "Tairiku X Patches"
+        description = "Ahmed Yarub's Patches with an X 12.31 Who to follow filter"
+        source = "https://github.com/rikunode/tairiku-x-patches"
+        author = "Tairiku"
+        contact = "https://github.com/rikunode/tairiku-x-patches"
+        website = "https://github.com/rikunode/tairiku-x-patches"
         license = "GPLv3"
     }
 }

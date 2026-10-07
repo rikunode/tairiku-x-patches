@@ -1,6 +1,12 @@
-# 🧩 Ahmed Yarub's Patches
+# 🧩 Tairiku X Patches
 
-Personal patches for use with [Morphe](https://morphe.software).
+> Private Morphe patch source based on [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches). This fork adds **Hide Who to follow** for X 12.31.0-prod.01.
+
+## Add to Morphe
+
+Configure Morphe's GitHub Personal Access Token with read access to this private repository, then open:
+
+https://morphe.software/add-source?github=rikunode/tairiku-x-patches
 
 ## ❓ About
 

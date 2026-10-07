@@ -1,3 +1,10 @@
+## 1.11.0-tairiku.1 (2026-10-08)
+
+### X
+
+* Add **Hide Who to follow** for X 12.31.0-prod.01.
+* Keep Ahmed Yarub's Patches 1.11.0 as the upstream base.
+
 ## [1.11.0](https://github.com/ahmedyarub/morphe-patches/compare/v1.10.0...v1.11.0) (2026-10-06)
 
 ### ✨ New Features

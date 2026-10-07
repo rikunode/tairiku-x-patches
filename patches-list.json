@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.11.0",
+  "version": "1.11.0-tairiku.1",
   "patches": [
     {
       "name": "Add ability to copy media link",
@@ -1378,6 +1378,33 @@
           "targets": [
             {
               "version": "450.0.0.50.77",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Hide Who to follow",
+      "description": "Hides Who to follow / recommended-account modules from timelines.",
+      "default": true,
+      "category": null,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "X",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "12.31.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
