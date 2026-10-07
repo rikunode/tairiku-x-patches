@@ -1,12 +1,12 @@
 # 🧩 Tairiku X Patches
 
-> Private Morphe patch source based on [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches). This fork adds **Hide Who to follow** for X 12.31.0-prod.01.
+> Morphe patch source based on [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches). This fork adds **Hide Who to follow** and **Hide Find more** for X 12.31.0-prod.01.
 
 ## Add to Morphe
 
-Configure Morphe's GitHub Personal Access Token with read access to this private repository, then open:
+This repository is public. Add the stable manifest directly in Morphe:
 
-https://morphe.software/add-source?github=rikunode/tairiku-x-patches
+https://raw.githubusercontent.com/rikunode/tairiku-x-patches/refs/heads/stable/patches-bundle.json
 
 ## ❓ About
 
@@ -21,9 +21,9 @@ Click here to add these patches to Morphe: https://morphe.software/add-source?gi
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.11.0](https://github.com/ahmedyarub/morphe-patches/releases/tag/v1.11.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;57 patches total
+> **[v1.11.0-tairiku.2](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.11.0-tairiku.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`stable`&nbsp;&nbsp;•&nbsp;&nbsp;59 patches total
 <details open>
-<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;40 patches</summary>
+<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;42 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -57,6 +57,8 @@ Click here to add these patches to Morphe: https://morphe.software/add-source?gi
 | [Hide Banner](#hide-banner) | Hides the "See new posts" pill at the top of the timeline. |  |
 | [Hide Community Notes](#hide-community-notes) | Hides Community Notes under posts. |  |
 | [Hide FAB](#hide-fab) | Hides the floating Post button. |  |
+| [Hide Find more](#hide-find-more) | Hides the Find more / top people recommendation module from Search. |  |
+| [Hide Who to follow](#hide-who-to-follow) | Hides Who to follow / recommended-account modules from timelines. |  |
 | [Hide badges from navigation bar icons](#hide-badges-from-navigation-bar-icons) | Hides the unread counts and dots on the bottom navigation bar. |  |
 | [Hide promote button](#hide-promote-button) | Hides the Boost button on your posts and the Boost item in their menu. |  |
 | [Hook feature flag](#hook-feature-flag) | Overrides the app's feature switches with values chosen when patching. | • Feature switches |

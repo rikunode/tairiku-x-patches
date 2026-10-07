@@ -1,3 +1,11 @@
+## 1.11.0-tairiku.2 (2026-10-08)
+
+### X
+
+* Add **Hide Find more** for the people recommendation card shown on Search.
+* Keep **Hide Who to follow** from the previous custom build.
+* Verify all fingerprints and the full patch set against X 12.31.0-prod.01.
+
 ## 1.11.0-tairiku.1 (2026-10-08)
 
 ### X

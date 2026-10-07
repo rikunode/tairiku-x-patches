@@ -19,24 +19,33 @@ import app.morphe.extension.shared.Logger;
  */
 @SuppressWarnings("unused")
 public final class WhoToFollow {
-    private static final String PREFIX = "who-to-follow";
+    private static final String WHO_TO_FOLLOW_PREFIX = "who-to-follow";
+    private static final String TOP_PEOPLE_SEARCH_PREFIX = "toptabsrpusermodule";
     private static final Map<Class<?>, Field[]> STRING_FIELDS = new ConcurrentHashMap<>();
 
     private WhoToFollow() {
     }
 
     public static boolean isWhoToFollow(Object item) {
+        return hasEntryIdPrefix(item, WHO_TO_FOLLOW_PREFIX);
+    }
+
+    public static boolean isTopPeopleSearch(Object item) {
+        return hasEntryIdPrefix(item, TOP_PEOPLE_SEARCH_PREFIX);
+    }
+
+    private static boolean hasEntryIdPrefix(Object item, String prefix) {
         if (item == null) return false;
 
         try {
             for (Field field : STRING_FIELDS.computeIfAbsent(item.getClass(), WhoToFollow::stringFields)) {
                 Object value = field.get(item);
-                if (value instanceof CharSequence && value.toString().startsWith(PREFIX)) {
+                if (value instanceof CharSequence && value.toString().startsWith(prefix)) {
                     return true;
                 }
             }
         } catch (Exception ex) {
-            Logger.printException(() -> "Who to follow filter failure", ex);
+            Logger.printException(() -> "Recommendation module filter failure", ex);
         }
 
         return false;

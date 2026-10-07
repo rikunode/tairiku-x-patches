@@ -31,6 +31,11 @@ public final class TimelineFilter {
         return false;
     }
 
+    /** Rewritten to true by Hide Find more. */
+    private static boolean hideFindMore() {
+        return false;
+    }
+
     /**
      * The keywords filtered until they are edited in the app, lowercase, separated by |.
      * Rewritten by Filter posts by keyword.
@@ -45,6 +50,7 @@ public final class TimelineFilter {
     private static final class Setup {
         static final boolean HIDE_PROMOTED = hidePromoted();
         static final boolean HIDE_WHO_TO_FOLLOW = hideWhoToFollow();
+        static final boolean HIDE_FIND_MORE = hideFindMore();
     }
 
     /** The filtered keywords, lowercase. Loaded on first use, replaced when edited. */
@@ -90,6 +96,7 @@ public final class TimelineFilter {
 
         return (Setup.HIDE_PROMOTED && Ads.isPromoted(item))
                 || (Setup.HIDE_WHO_TO_FOLLOW && WhoToFollow.isWhoToFollow(item))
+                || (Setup.HIDE_FIND_MORE && WhoToFollow.isTopPeopleSearch(item))
                 || containsKeyword(item);
     }
 
