@@ -1,13 +1,9 @@
 name: Release
 
 on:
+  # This private/custom fork publishes releases manually. The upstream semantic-release
+  # workflow must not rewrite this fork's version/manifest after every push.
   workflow_dispatch:
-  # Only these branches release (see .releaserc); every other branch is built by
-  # build_pull_request.yml, without the write permissions below.
-  push:
-    branches:
-      - main
-      - dev
 
 permissions: {}
 

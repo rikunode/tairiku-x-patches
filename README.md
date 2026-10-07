@@ -21,9 +21,9 @@ Click here to add these patches to Morphe: https://morphe.software/add-source?gi
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.0](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;58 patches total
+> **[v1.11.0](https://github.com/ahmedyarub/morphe-patches/releases/tag/v1.11.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;57 patches total
 <details open>
-<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;41 patches</summary>
+<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;40 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -57,7 +57,6 @@ Click here to add these patches to Morphe: https://morphe.software/add-source?gi
 | [Hide Banner](#hide-banner) | Hides the "See new posts" pill at the top of the timeline. |  |
 | [Hide Community Notes](#hide-community-notes) | Hides Community Notes under posts. |  |
 | [Hide FAB](#hide-fab) | Hides the floating Post button. |  |
-| [Hide Who to follow](#hide-who-to-follow) | Hides Who to follow / recommended-account modules from timelines. |  |
 | [Hide badges from navigation bar icons](#hide-badges-from-navigation-bar-icons) | Hides the unread counts and dots on the bottom navigation bar. |  |
 | [Hide promote button](#hide-promote-button) | Hides the Boost button on your posts and the Boost item in their menu. |  |
 | [Hook feature flag](#hook-feature-flag) | Overrides the app's feature switches with values chosen when patching. | • Feature switches |
