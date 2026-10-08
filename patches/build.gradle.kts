@@ -3,7 +3,7 @@ group = "app.ahmedyarub"
 patches {
     about {
         name = "Legacy X Patches"
-        description = "Ahmed Yarub's Patches with an X 12.31 Who to follow filter"
+        description = "Ahmed Yarub's Patches with X 12.31 Who to follow and Find more filters"
         source = "https://github.com/rikunode/x-feed-cleanup-patches"
         author = "Legacy"
         contact = "https://github.com/rikunode/x-feed-cleanup-patches"

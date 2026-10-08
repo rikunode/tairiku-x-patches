@@ -21,7 +21,7 @@ Click here to add these patches to Morphe: https://morphe.software/add-source?gi
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.11.0-legacy.2](https://github.com/rikunode/x-feed-cleanup-patches/releases/tag/v1.11.0-legacy.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`stable`&nbsp;&nbsp;•&nbsp;&nbsp;59 patches total
+> **[v1.11.0-legacy.3](https://github.com/rikunode/x-feed-cleanup-patches/releases/tag/v1.11.0-legacy.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;59 patches total
 <details open>
 <summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;42 patches</summary>
 <br>

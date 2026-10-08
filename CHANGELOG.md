@@ -1,3 +1,10 @@
+## 1.11.0-legacy.3 (2026-10-08)
+
+### Fixes
+
+* Package the patch bundle with `classes.dex` so Morphe Manager can load the patches on Android.
+* Keep **Hide Who to follow** and **Hide Find more** for X 12.31.0-prod.01.
+
 ## 1.11.0-legacy.2 (2026-10-08)
 
 ### X
