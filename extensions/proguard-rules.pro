@@ -10,6 +10,9 @@
 -keep class app.ahmedyarub.** {
   *;
 }
+-keep class app.legacy.** {
+  *;
+}
 -keep class com.google.** {
   *;
 }
