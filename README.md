@@ -4,9 +4,9 @@
 
 ## Add to Morphe
 
-This repository is public. Add the stable manifest directly in Morphe:
+This repository is public. In Morphe's remote source field, add the repository URL:
 
-https://raw.githubusercontent.com/rikunode/tairiku-x-patches/refs/heads/stable/patches-bundle.json
+https://github.com/rikunode/tairiku-x-patches
 
 ## ❓ About
 
