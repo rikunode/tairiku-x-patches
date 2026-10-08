@@ -1,9 +1,28 @@
-group = "app.ahmedyarub"
+group = "app.tairiku"
+
+// This custom source intentionally publishes only the two Tairiku X patches. The Ahmed
+// sources stay in the repository for reference/upstream sync but are not compiled into this bundle.
+kotlin.sourceSets.named("main") {
+    kotlin.setSrcDirs(listOf("src/minimal/kotlin", "src/main/kotlin/util"))
+}
+
+sourceSets.named("main") {
+    // The add-on has no Java patch sources. Keep legacy/upstream Java trees out if one is added later.
+    java.setSrcDirs(emptyList<String>())
+    // Morphe loads multiple patch bundles through one class loader. Ahmed's selected X patches can
+    // resolve extension resources through this bundle first, so keep its shared + X extensions
+    // alongside our unique Tairiku extension. They are resources, not selectable patches.
+    resources.include(
+        "extensions/shared.mpe",
+        "extensions/x.mpe",
+        "extensions/tairiku-x.mpe",
+    )
+}
 
 patches {
     about {
         name = "Tairiku X Patches"
-        description = "Ahmed Yarub's Patches with X 12.31 Who to follow and Find more filters"
+        description = "Two standalone X recommendation filters designed to coexist with Ahmed Yarub's Patches"
         source = "https://github.com/rikunode/tairiku-x-patches"
         author = "Tairiku"
         contact = "https://github.com/rikunode/tairiku-x-patches"
@@ -22,9 +41,6 @@ dependencies {
 
     // Shared helpers (returnEarly, findFreeRegister, ...).
     implementation(libs.morphe.patches.library)
-    // Instagram specific patches and fingerprints shared with brosssh's bundle.
-    implementation(libs.instagram.morphe.patches.library)
-
     testImplementation(kotlin("test"))
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
@@ -61,6 +77,14 @@ tasks {
         dependsOn(jar)
         systemProperty("morphe.bundle", jar.get().archiveFile.get().asFile.absolutePath)
         systemProperty("morphe.buildDir", layout.buildDirectory.get().asFile.absolutePath)
+        listOf(
+            "morphe.cross.x31",
+            "morphe.cross.ahmed11",
+            "morphe.cross.x32",
+            "morphe.cross.ahmed12",
+        ).forEach { key ->
+            providers.gradleProperty(key).orNull?.let { systemProperty(key, it) }
+        }
         testLogging {
             events("passed", "skipped", "failed")
             exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL

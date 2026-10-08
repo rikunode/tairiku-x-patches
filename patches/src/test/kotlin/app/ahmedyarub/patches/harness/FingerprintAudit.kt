@@ -1,10 +1,6 @@
 package app.ahmedyarub.patches.harness
 
-import app.ahmedyarub.patches.shared.stringPoolsPatch
-import app.crimera.patches.instagram.entity.decoder.decoderEntity
-import app.ahmedyarub.patches.x.shared.xExtensionPatch
-import app.morphe.library.instagram.patches.instagramExtensionPatch
-import app.morphe.patches.all.misc.resources.resourceMappingPatch
+import app.tairiku.patches.x.recommendationFilterPatch
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.Patcher
 import app.morphe.patcher.PatcherConfig
@@ -36,9 +32,7 @@ internal object FingerprintAudit {
      */
     private val FINGERPRINT_PACKAGES =
         mapOf(
-            "com.instagram.android" to listOf("app/ahmedyarub/patches/instagram/", "app/crimera/patches/instagram/"),
-            "com.reddit.frontpage" to listOf("app/ahmedyarub/patches/reddit/"),
-            "com.twitter.android" to listOf("app/ahmedyarub/patches/x/"),
+            "com.twitter.android" to listOf("app/tairiku/patches/x/"),
         )
 
     @JvmStatic
@@ -51,11 +45,8 @@ internal object FingerprintAudit {
             val packageName = patcher.context.packageMetadata.packageName
 
             val audit = bytecodePatch(description = "Fingerprint audit") {
-                // Fingerprints on extension classes resolve only once the extension is merged,
-                // resource literals need the resource ids, and some fingerprints compare against
-                // classes the decoder resolves. None of these change the app's own code.
-                if (packageName == "com.instagram.android") dependsOn(instagramExtensionPatch, resourceMappingPatch, decoderEntity, stringPoolsPatch)
-                if (packageName == "com.twitter.android") dependsOn(xExtensionPatch, resourceMappingPatch)
+                // Extension fingerprints resolve only after the standalone Tairiku extension is merged.
+                if (packageName == "com.twitter.android") dependsOn(recommendationFilterPatch)
 
                 execute {
                     declaredFingerprints(FINGERPRINT_PACKAGES[packageName].orEmpty()).forEach { (id, declared) ->
@@ -93,7 +84,13 @@ internal object FingerprintAudit {
             }
 
         return classNames.flatMap { className ->
-            val type = runCatching { Class.forName(className, false, loader) }.getOrNull() ?: return@flatMap emptyList()
+            val loadedType = runCatching { Class.forName(className, false, loader) }
+            val type =
+                loadedType.getOrElse { failure ->
+                    return@flatMap listOf(
+                        "$className.<class>" to Result.failure<Fingerprint>(failure),
+                    )
+                }
             type.declaredFields
                 .filter { Modifier.isStatic(it.modifiers) && Fingerprint::class.java.isAssignableFrom(it.type) }
                 .map { field ->

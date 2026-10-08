@@ -3,14 +3,31 @@ package app.ahmedyarub.patches
 import app.ahmedyarub.patches.harness.Bundle
 import app.ahmedyarub.patches.harness.withDependencies
 import kotlin.test.Test
+import java.util.jar.JarFile
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /** Checks on the bundle that need no APK. */
 class BundleTest {
     @Test
-    fun `the bundle loads the named patches`() {
-        assertEquals(Bundle.patches.mapNotNull { it.name }.toSet(), Bundle.loadedPatchNames)
+    fun `the bundle exposes exactly the two add-on patches`() {
+        val expected = setOf("Hide Who to follow", "Hide Find more")
+        assertEquals(expected, Bundle.patches.mapNotNull { it.name }.toSet())
+        assertEquals(expected, Bundle.loadedPatchNames)
+    }
+
+    @Test
+    fun `the bundle does not package upstream patch classes or extensions`() {
+        val entries = JarFile(Bundle.file).use { jar -> jar.entries().toList().map { it.name }.toSet() }
+
+        assertTrue(
+            entries.none { it.startsWith("app/ahmedyarub/patches/") },
+            "Upstream Ahmed patch classes leaked into the add-on bundle",
+        )
+        assertEquals(
+            setOf("extensions/shared.mpe", "extensions/x.mpe", "extensions/tairiku-x.mpe"),
+            entries.filter { it.startsWith("extensions/") && it.endsWith(".mpe") }.toSet(),
+        )
     }
 
     /**
@@ -23,7 +40,7 @@ class BundleTest {
         // The libraries bundled in the .mpp carry patches of their own, which are theirs to prune.
         val unreachable =
             Bundle.declaredPatches
-                .filterKeys { it.startsWith("app.ahmedyarub.") || it.startsWith("app.crimera.") }
+                .filterKeys { it.startsWith("app.tairiku.") }
                 .filterValues { it.name == null && it !in reachable }
                 .keys
                 .sorted()

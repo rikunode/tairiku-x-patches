@@ -1,3 +1,12 @@
+## 1.12.0-tairiku.1 (2026-10-08)
+
+### X
+
+* Publish **only two selectable patches**: **Hide Who to follow** and **Hide Find more**.
+* Move the shared hook and extension code into unnamed internal dependencies, so Morphe shows `0/2` instead of the full Ahmed patch catalog.
+* Verify both patches together and individually on X 12.31.0-prod.01 and 12.32.0-prod.01.
+* Keep the custom extension in its own `app.tairiku` namespace so it can coexist with Ahmed Yarub's Patches.
+
 ## 1.11.0-tairiku.3 (2026-10-08)
 
 ### Fixes
