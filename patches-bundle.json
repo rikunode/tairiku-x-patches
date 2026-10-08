@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-10-08T03:30:00+09:00",
+  "created_at": "2026-10-08T03:30:00",
   "description": "## 1.11.0-tairiku.2 (2026-10-08)\n\n### X\n\n* Add **Hide Find more** for the people recommendation card shown on Search.\n* Keep **Hide Who to follow**.\n* Based on Ahmed Yarub's Patches 1.11.0.\n* Real X 12.31 APK patch test passed.",
   "download_url": "https://github.com/rikunode/tairiku-x-patches/releases/download/v1.11.0-tairiku.2/patches-1.11.0-tairiku.2.mpp",
   "signature_download_url": "",
