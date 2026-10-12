@@ -24,7 +24,10 @@ sdk_jars = [platform / "android.jar" for root in sdk_roots if root.is_dir()
             for platform in root.glob("platforms/android-*")
             if (platform / "android.jar").is_file()]
 assert sdk_jars, "An Android SDK platform android.jar is required"
-sdk_jar = sorted(sdk_jars, key=lambda p: int(p.parent.name.split("-")[-1]))[-1]
+sdk_jar = sorted(sdk_jars, key=lambda p: (
+    int(p.parent.name.split("-")[1]),
+    len(p.parent.name.split("-")) == 2,  # prefer the base API over extension variants
+))[-1]
 
 out = repo / "build/test-external-post-link"
 out.mkdir(parents=True, exist_ok=True)
