@@ -1,7 +1,0 @@
-{
-  "created_at": "2026-10-12T09:27:31",
-  "description": "## 1.12.0-tairiku.3-rc.1 (experimental, 2026-10-12)\n\n* Add opt-in **Fix external post links** to open externally shared X status URLs directly in post detail, bypassing the Home/For You route.\n* Keep **Hide Find more** and **Hide Who to follow** selectable; refine Find more targeting to related posts only.\n* Verified static APK patching and fingerprint uniqueness on X 12.31.0-prod.01 and 12.32.0-prod.01.\n* **UNVERIFIED on device.** This is an experimental opt-in build; preserve the stable release if needed.",
-  "download_url": "https://github.com/rikunode/tairiku-x-patches/releases/download/v1.12.0-tairiku.3-rc.1/patches-1.12.0-tairiku.3-rc.1.mpp",
-  "signature_download_url": "",
-  "version": "1.12.0-tairiku.3-rc.1"
-}
