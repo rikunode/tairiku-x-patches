@@ -21,7 +21,7 @@ Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source,
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.12.0-tairiku.1](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+> **[v1.12.0-tairiku.2](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
 <details open>
 <summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -33,7 +33,7 @@ Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source,
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Hide Find more](#hide-find-more) | Hides the Find more / top people recommendation module from Search. |  |
+| [Hide Find more](#hide-find-more) | Hides Discover more / もっと見つける under posts and top people recommendations in Search. |  |
 | [Hide Who to follow](#hide-who-to-follow) | Hides Who to follow / recommended-account modules from timelines. |  |
 
 </details>

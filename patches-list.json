@@ -1,10 +1,10 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.12.0-tairiku.1",
+  "version": "1.12.0-tairiku.2",
   "patches": [
     {
       "name": "Hide Find more",
-      "description": "Hides the Find more / top people recommendation module from Search.",
+      "description": "Hides Discover more / もっと見つける under posts and top people recommendations in Search.",
       "default": true,
       "category": null,
       "dependencies": [],

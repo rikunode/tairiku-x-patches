@@ -12,7 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unused")
 public final class RecommendationFilter {
     private static final String WHO_TO_FOLLOW_PREFIX = "who-to-follow";
-    private static final String FIND_MORE_PREFIX = "toptabsrpusermodule";
+    private static final String FIND_MORE_SEARCH_PREFIX = "toptabsrpusermodule";
+    // Post-detail "Discover more" / "もっと見つける" is a different server module.
+    // Piko's Hide Detailed Posts filters tweetdetail-prefixed timeline entries.
+    private static final String FIND_MORE_POST_DETAIL_PREFIX = "tweetdetail";
 
     /**
      * X 12.31 and 12.32 timeline items implement an interface whose public c() method returns the
@@ -46,7 +49,13 @@ public final class RecommendationFilter {
         if (entryId == null) return false;
 
         return (Setup.HIDE_WHO_TO_FOLLOW && entryId.startsWith(WHO_TO_FOLLOW_PREFIX))
-                || (Setup.HIDE_FIND_MORE && entryId.startsWith(FIND_MORE_PREFIX));
+                || (Setup.HIDE_FIND_MORE && isFindMoreEntryId(entryId));
+    }
+
+    static boolean isFindMoreEntryId(String entryId) {
+        return entryId != null &&
+                (entryId.startsWith(FIND_MORE_SEARCH_PREFIX) ||
+                        entryId.startsWith(FIND_MORE_POST_DETAIL_PREFIX));
     }
 
     public static Object filter(Object item) {

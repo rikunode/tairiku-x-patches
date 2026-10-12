@@ -12,7 +12,7 @@ private object HideFindMoreExtensionFingerprint : Fingerprint(
 @Suppress("unused")
 val hideFindMorePatch = bytecodePatch(
     name = "Hide Find more",
-    description = "Hides the Find more / top people recommendation module from Search.",
+    description = "Hides Discover more / もっと見つける under posts and top people recommendations in Search.",
 ) {
     compatibleWith(COMPATIBILITY_X)
     dependsOn(recommendationFilterPatch)
