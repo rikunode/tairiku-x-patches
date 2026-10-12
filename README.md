@@ -20,8 +20,13 @@ In Morphe, add this *separate* remote source to test without altering the stable
 
 https://raw.githubusercontent.com/rikunode/tairiku-x-patches/main/patches-bundle-beta.json
 
-Select **Fix external post links** together with whichever other patches you already
-used, and apply to X 12.31.0-prod.01 or 12.32.0-prod.01. To roll back, reinstall
+Temporarily **disable the stable Tairiku X source when applying the experimental
+bundle** so its overlapping patch names/classes do not conflict; keep that source
+installed for rollback. Leave Ahmed Yarub's source enabled if you use its separate
+features. Select **Fix external post links** plus the optional Tairiku filters you
+want and apply to X 12.31.0-prod.01 or 12.32.0-prod.01. Test status links
+from both cold and warm starts and confirm profile links, internal post taps, and
+back navigation are unchanged. To roll back, disable this beta source and reinstall
 an APK built using the stable v1.12.0-tairiku.2 source.
 
 ## ❓ About
