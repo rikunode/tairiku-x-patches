@@ -13,9 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class RecommendationFilter {
     private static final String WHO_TO_FOLLOW_PREFIX = "who-to-follow";
     private static final String FIND_MORE_SEARCH_PREFIX = "toptabsrpusermodule";
-    // Post-detail "Discover more" / "もっと見つける" is a different server module.
-    // Piko's Hide Detailed Posts filters tweetdetail-prefixed timeline entries.
-    private static final String FIND_MORE_POST_DETAIL_PREFIX = "tweetdetail";
+    // Only post-detail related-tweet recommendations ("Discover more").
+    // Never drop a generic tweetdetail entry: external post deep links may be injected
+    // into Home timelines, and deleting a broader entry can break post navigation.
+    private static final String FIND_MORE_POST_DETAIL_PREFIX = "tweetdetailrelatedtweets";
 
     /**
      * X 12.31 and 12.32 timeline items implement an interface whose public c() method returns the

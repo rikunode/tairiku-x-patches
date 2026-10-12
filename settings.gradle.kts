@@ -31,6 +31,8 @@ dependencyResolutionManagement {
 }
 
 pluginManagement {
+    // Optional local composite plugin build for offline verification; CI uses the published plugin.
+    System.getenv("MORPHE_LOCAL_PLUGIN_DIR")?.takeIf { it.isNotBlank() }?.let { includeBuild(it) }
     repositories {
         gradlePluginPortal()
         google()
@@ -49,6 +51,9 @@ pluginManagement {
 plugins {
     id("app.morphe.patches") version "1.3.4"
 }
+
+// Offline developer verification only: substitute locally built patcher sources when requested.
+System.getenv("MORPHE_LOCAL_PATCHER_DIR")?.takeIf { it.isNotBlank() }?.let { includeBuild(it) }
 
 settings {
     extensions {
