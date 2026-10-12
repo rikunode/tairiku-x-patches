@@ -1,0 +1,63 @@
+name: Publish experimental Morphe patch
+
+on:
+  push:
+    tags:
+      - 'v*-rc.*'
+
+permissions:
+  contents: write
+  packages: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tagged source
+        uses: actions/checkout@v7
+
+      - name: Setup Java
+        uses: actions/setup-java@v6.0.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Verify candidate version and manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          declared="$(sed -n 's/^version = //p' gradle.properties)"
+          test "$version" = "$declared"
+          python3 scripts/test-morphe-metadata.py
+          bash scripts/test-recommendation-filter.sh
+          python3 scripts/test-external-post-link.py
+
+      - name: Build and run bundle tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :patches:buildAndroid :patches:test --no-daemon
+
+      - name: Verify release artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          test -s "patches/build/libs/patches-$version.mpp"
+          unzip -t "patches/build/libs/patches-$version.mpp" >/dev/null
+          sha256sum "patches/build/libs/patches-$version.mpp"
+
+      - name: Create opt-in pre-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          gh release create "$GITHUB_REF_NAME" \
+            "patches/build/libs/patches-$version.mpp" \
+            patches-bundle-beta.json \
+            --prerelease --target "$GITHUB_SHA" \
+            --title "$version (experimental external post links)" \
+            --notes "Experimental, not device-verified. Adds Fix external post links alongside both existing recommendation-filter patches. Verified against X 12.31/12.32 APK fingerprints and patching. Stable v1.12.0-tairiku.2 remains available."
+          gh release view "$GITHUB_REF_NAME" --json tagName,assets --jq '{tag: .tagName, assets: [.assets[].name]}'

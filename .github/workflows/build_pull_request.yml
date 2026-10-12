@@ -30,8 +30,14 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Verify remote source metadata compatibility
+        run: python3 scripts/test-morphe-metadata.py
+
       - name: Verify Discover more entry filtering
         run: bash scripts/test-recommendation-filter.sh
+
+      - name: Verify external post URL parsing and navigation args
+        run: python3 scripts/test-external-post-link.py
 
       # The unit tests check the bundle itself: every patch loads, none is unreachable, and the
       # patches for one app agree on its versions. The APK tests need the target APKs, which are

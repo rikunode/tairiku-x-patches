@@ -4,9 +4,11 @@ package app.tairiku.extension.x;
 public final class RecommendationFilterTest {
     public static void main(String[] args) throws Exception {
         // Post-detail Discover more: the missing case in the original patch.
-        expectHidden("tweetdetail-123456789");
-        expectHidden("tweetdetail-relatedposts-123456789");
-        expectHidden("tweetdetail");
+        expectHidden("tweetdetailrelatedtweets-123456789");
+        expectHidden("tweetdetailrelatedtweets");
+        expectVisible("tweetdetail-123456789");
+        expectVisible("tweetdetail-relatedposts-123456789");
+        expectVisible("tweetdetail");
         // Preserve the original Search filter.
         expectHidden("toptabsrpusermodule-123456789");
 
@@ -25,7 +27,7 @@ public final class RecommendationFilterTest {
         if (!"tweetdetail-42".equals(id)) {
             throw new AssertionError("Entry-id accessor stopped finding a public c() method");
         }
-        System.out.println("RecommendationFilter: 10 entry-id cases and accessor passed");
+        System.out.println("RecommendationFilter: 11 entry-id cases and accessor passed");
     }
 
     private static void expectHidden(String id) {

@@ -8,6 +8,22 @@ This repository is public. In Morphe's remote source field, add the repository U
 
 https://github.com/rikunode/tairiku-x-patches
 
+## Experimental external-post-link build (opt-in)
+
+The stable source above stays on v1.12.0-tairiku.2. The experimental release
+v1.12.0-tairiku.3-rc.1 adds the optional **Fix external post links** patch,
+alongside the two established recommendation filters. It redirects recognized external
+post links into X's own post-detail navigation, attempting to avoid the hidden
+For You timeline tab. This is not yet verified on a physical phone.
+
+In Morphe, add this *separate* remote source to test without altering the stable source:
+
+https://raw.githubusercontent.com/rikunode/tairiku-x-patches/main/patches-bundle-beta.json
+
+Select **Fix external post links** together with whichever other patches you already
+used, and apply to X 12.31.0-prod.01 or 12.32.0-prod.01. To roll back, reinstall
+an APK built using the stable v1.12.0-tairiku.2 source.
+
 ## ❓ About
 
 Patches built with [Morphe Patcher](https://github.com/MorpheApp/morphe-patcher) for apps I
