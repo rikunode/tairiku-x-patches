@@ -37,8 +37,8 @@ for filename in manifest_paths:
     assert manifest.get("signature_download_url") in (None, ""), filename
     print(f"{filename.name}: {version} metadata PASS")
 
-candidate = json.loads((beta if beta.is_file() else root / "patches-bundle.json").read_text(encoding="utf-8"))
+candidate = json.loads((root / "patches-bundle.json").read_text(encoding="utf-8"))
 assert candidate["version"] == build_version, (
-    "Candidate manifest, patch list and Gradle versions must agree"
+    "Stable manifest, patch list and Gradle versions must agree"
 )
 print(f"Candidate bundle {build_version}: PASS")

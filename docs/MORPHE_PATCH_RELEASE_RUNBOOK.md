@@ -23,7 +23,7 @@ Reusable checklist for Morphe patch bundles (X/Pupil/etc.). Distinguish **bundle
 ## Post-release gate (non-negotiable)
 1. Independently retrieve `https://raw.githubusercontent.com/OWNER/REPO/main/patches-bundle.json` and parse the timestamp and version.
 2. Verify Release tag and matching `.mpp` asset exist, with the expected checksum where available.
-3. Import/update that remote source in the Morphe Manager. Verify it shows a meaningful title, target version, and intended patch count (X stable `.2`: **two**, experimental `.3-rc.1`: **three**). If stale, allow cache time and refresh; do not mistake the stale release-attached JSON for the `main` raw file. Never patch using two source bundles with overlapping patch names; temporarily disable the unused source during installation.
+3. Import/update that remote source in the Morphe Manager. Verify it shows a meaningful title, target version, and intended patch count (X stable `.3`: **three**, historical stable `.2`: **two**). If stale, allow cache time and refresh; do not mistake the stale release-attached JSON for the `main` raw file. Never patch using two source bundles with overlapping patch names; temporarily disable the unused source during installation.
 4. Test the actual patched APK and the specific target UI separately; only user/device evidence closes that stage.
 5. **Do not announce done** for a source/patched-app task before its corresponding verified gate passes.
 
@@ -32,4 +32,4 @@ Reusable checklist for Morphe patch bundles (X/Pupil/etc.). Distinguish **bundle
 - Source repair commit (one JSON field changed): https://github.com/rikunode/tairiku-x-patches/commit/73391dad35fbcb0d6476c3874baa1dd19e1dea24.
 - Public raw manifest read-back confirmed `2026-10-12T02:50:02` and release `1.12.0-tairiku.2`.
 - User explicitly confirmed the Morphe source was updated successfully after the repair; this **does not** prove Hide Find more's UI behavior is fixed.
-- Experimental deep-link `v1.12.0-tairiku.3-rc.1` published by a verified Git tag Action: https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.3-rc.1. The Actions run 38231936233 built and tested, and the Release asset's SHA-256 equaled CI `5f3877070fe808f8f8c64cd706dfcfd6d8c463e41fceeb407e2956147e3a0876`. The user has **not yet** confirmed device functionality of the new link fix.
+- Experimental deep-link `v1.12.0-tairiku.3-rc.1` published by a verified Git tag Action: https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.3-rc.1. The Actions run 38231936233 built and tested, and the Release asset's SHA-256 equaled CI `5f3877070fe808f8f8c64cd706dfcfd6d8c463e41fceeb407e2956147e3a0876`. The user later **confirmed successful external status-link navigation on a real Android phone**, with a screenshot showing the previously failing RayNoWar2026 post directly in X's post-detail screen. This establishes the narrow on-device success case, not universal compatibility.

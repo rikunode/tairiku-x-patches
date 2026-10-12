@@ -1,6 +1,6 @@
 # 🧩 Tairiku X Patches
 
-> Two standalone Morphe patches for X: **Hide Who to follow** and **Hide Find more**. They are intentionally packaged as a tiny add-on source so they can be selected alongside [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches).
+> Three Morphe patches for X: **Fix external post links**, **Hide Find more** and **Hide Who to follow**. They can be selected alongside [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches).
 
 ## Add to Morphe
 
@@ -8,26 +8,23 @@ This repository is public. In Morphe's remote source field, add the repository U
 
 https://github.com/rikunode/tairiku-x-patches
 
-## Experimental external-post-link build (opt-in)
+## Stable external-post-link fix (v1.12.0-tairiku.3)
 
-The stable source above stays on v1.12.0-tairiku.2. The experimental release
-v1.12.0-tairiku.3-rc.1 adds the optional **Fix external post links** patch,
-alongside the two established recommendation filters. It redirects recognized external
-post links into X's own post-detail navigation, attempting to avoid the hidden
-For You timeline tab. This is not yet verified on a physical phone.
+The stable source now includes the **Fix external post links** patch, which routes
+recognized external post URLs directly into X's post-detail navigation rather
+than Home/For You. On 2026-10-12, the user confirmed on an actual Android phone
+that an external post opens directly with For You hidden. It retains the two
+recommendation filters. Tested for X 12.31.0-prod.01 and 12.32.0-prod.01.
 
-In Morphe, add this *separate* remote source to test without altering the stable source:
+Use the **same existing stable source URL above**; refresh it to see all three
+patches. You do not need to add another source.
 
-https://raw.githubusercontent.com/rikunode/tairiku-x-patches/main/patches-bundle-beta.json
-
-Temporarily **disable the stable Tairiku X source when applying the experimental
-bundle** so its overlapping patch names/classes do not conflict; keep that source
-installed for rollback. Leave Ahmed Yarub's source enabled if you use its separate
-features. Select **Fix external post links** plus the optional Tairiku filters you
-want and apply to X 12.31.0-prod.01 or 12.32.0-prod.01. Test status links
-from both cold and warm starts and confirm profile links, internal post taps, and
-back navigation are unchanged. To roll back, disable this beta source and reinstall
-an APK built using the stable v1.12.0-tairiku.2 source.
+**Retire the duplicate beta source** in Morphe after refreshing the stable source;
+otherwise overlapping patch names can conflict. Keep Ahmed Yarub's separate source
+for its features. Select the stable **Fix external post links** patch with any of
+the other Tairiku patches, rebuild and install. Existing APKs do not update simply
+because the remote source changes. The earlier `v1.12.0-tairiku.2` stable Release and
+`v1.12.0-tairiku.3-rc.1` pre-release remain archived for recovery.
 
 ## ❓ About
 
@@ -37,14 +34,14 @@ that have actually been verified are declared as compatible.
 
 ### How to use these patches
 
-Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source, and select only the two Tairiku patches you want from this source.
+Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source, and select whichever of the three Tairiku patches you want from this source.
 
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.12.0-tairiku.2](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+> **[v1.12.0-tairiku.3](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;3 patches total
 <details open>
-<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -54,6 +51,7 @@ Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source,
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
+| [Fix external post links](#fix-external-post-links) | Opens external X post URLs directly, preserving a hidden For You tab. |  |
 | [Hide Find more](#hide-find-more) | Hides Discover more / もっと見つける under posts and top people recommendations in Search. |  |
 | [Hide Who to follow](#hide-who-to-follow) | Hides Who to follow / recommended-account modules from timelines. |  |
 
