@@ -19,6 +19,21 @@ public final class RecommendationFilterTest {
         expectVisible("cursor-bottom-0");
         expectVisible(null);
 
+        // Dedicated score modules are filtered only by the optional fourth patch.
+        expectSportsHidden("sports-score-mlb-123");
+        expectSportsHidden("sports-scores-mlb-123");
+        expectSportsHidden("scoreboard-mlb-123");
+        expectSportsHidden("live-score-mlb-123");
+        expectSportsHidden("game-score-mlb-123");
+        expectSportsVisible("tweet-123456");
+        expectSportsVisible("tweet-123-sports-score-mlb");
+        expectSportsVisible("conversationthread-123-scoreboard-mlb");
+        expectSportsVisible("tweetdetailrelatedtweets-456");
+        expectSportsVisible("sports-news-mlb");
+        expectSportsVisible("happening-now-mlb");
+        expectSportsVisible("cursor-bottom-0");
+        expectSportsVisible(null);
+
         // Check the model's verified entry-id accessor remains usable.
         java.lang.reflect.Method accessor = RecommendationFilter.class
                 .getDeclaredMethod("entryId", Object.class);
@@ -27,7 +42,7 @@ public final class RecommendationFilterTest {
         if (!"tweetdetail-42".equals(id)) {
             throw new AssertionError("Entry-id accessor stopped finding a public c() method");
         }
-        System.out.println("RecommendationFilter: 11 entry-id cases and accessor passed");
+        System.out.println("RecommendationFilter: recommendation and candidate sports-score entry IDs passed");
     }
 
     private static void expectHidden(String id) {
@@ -39,6 +54,18 @@ public final class RecommendationFilterTest {
     private static void expectVisible(String id) {
         if (RecommendationFilter.isFindMoreEntryId(id)) {
             throw new AssertionError("Unrelated timeline entry would be hidden: " + id);
+        }
+    }
+
+    private static void expectSportsHidden(String id) {
+        if (!RecommendationFilter.isSportsScoreEntryId(id)) {
+            throw new AssertionError("Expected dedicated sports score module to be filtered: " + id);
+        }
+    }
+
+    private static void expectSportsVisible(String id) {
+        if (RecommendationFilter.isSportsScoreEntryId(id)) {
+            throw new AssertionError("Non-score timeline entry would be hidden: " + id);
         }
     }
 
