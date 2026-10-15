@@ -17,6 +17,11 @@ public final class RecommendationFilter {
     // Never drop a generic tweetdetail entry: external post deep links may be injected
     // into Home timelines, and deleting a broader entry can break post navigation.
     private static final String FIND_MORE_POST_DETAIL_PREFIX = "tweetdetailrelatedtweets";
+    // These are candidate URT module IDs. Do not match sports tweets or generic news/events.
+    // This intentionally fails open for unknown IDs pending on-device identification.
+    private static final String[] SPORTS_SCORE_PREFIXES = {
+            "scoreboard", "sports-score", "sport-score", "live-score", "game-score"
+    };
 
     /**
      * X 12.31 and 12.32 timeline items implement an interface whose public c() method returns the
@@ -38,9 +43,15 @@ public final class RecommendationFilter {
         return false;
     }
 
+    /** Rewritten to true by the optional Hide sports scores patch. */
+    private static boolean hideSportsScores() {
+        return false;
+    }
+
     private static final class Setup {
         static final boolean HIDE_WHO_TO_FOLLOW = hideWhoToFollow();
         static final boolean HIDE_FIND_MORE = hideFindMore();
+        static final boolean HIDE_SPORTS_SCORES = hideSportsScores();
     }
 
     public static boolean hide(Object item) {
@@ -50,13 +61,27 @@ public final class RecommendationFilter {
         if (entryId == null) return false;
 
         return (Setup.HIDE_WHO_TO_FOLLOW && entryId.startsWith(WHO_TO_FOLLOW_PREFIX))
-                || (Setup.HIDE_FIND_MORE && isFindMoreEntryId(entryId));
+                || (Setup.HIDE_FIND_MORE && isFindMoreEntryId(entryId))
+                || (Setup.HIDE_SPORTS_SCORES && isSportsScoreEntryId(entryId));
     }
 
     static boolean isFindMoreEntryId(String entryId) {
         return entryId != null &&
                 (entryId.startsWith(FIND_MORE_SEARCH_PREFIX) ||
                         entryId.startsWith(FIND_MORE_POST_DETAIL_PREFIX));
+    }
+
+    /** Only suppress dedicated score modules, never ordinary tweet/conversation IDs. */
+    static boolean isSportsScoreEntryId(String entryId) {
+        if (entryId == null) return false;
+        if (entryId.startsWith("tweet-") || entryId.startsWith("tweetdetail") ||
+                entryId.startsWith("conversationthread-") || entryId.startsWith("search-")) return false;
+
+        for (String prefix : SPORTS_SCORE_PREFIXES) {
+            if (entryId.equals(prefix) || entryId.startsWith(prefix + "-") ||
+                    entryId.startsWith(prefix + "s-")) return true;
+        }
+        return false;
     }
 
     public static Object filter(Object item) {
