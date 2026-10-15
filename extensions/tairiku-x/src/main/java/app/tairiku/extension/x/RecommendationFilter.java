@@ -1,5 +1,6 @@
 package app.tairiku.extension.x;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
@@ -17,11 +18,13 @@ public final class RecommendationFilter {
     // Never drop a generic tweetdetail entry: external post deep links may be injected
     // into Home timelines, and deleting a broader entry can break post navigation.
     private static final String FIND_MORE_POST_DETAIL_PREFIX = "tweetdetailrelatedtweets";
-    // These are candidate URT module IDs. Do not match sports tweets or generic news/events.
-    // This intentionally fails open for unknown IDs pending on-device identification.
-    private static final String[] SPORTS_SCORE_PREFIXES = {
-            "scoreboard", "sports-score", "sport-score", "live-score", "game-score"
-    };
+    // Verified by examining the DEX class/field chains of X 12.31.0 and 12.32.0:
+    // w1 (URT tile item) -> a: d0 (timeline tile) -> a: s (tile content),
+    // where o implements s and is serialized as TileContent.ScoreCard.
+    // Match the content type itself; never rely on a sport name or entry-id prefix.
+    private static final String TIMELINE_TILE_ITEM = "com.x.models.timelines.items.w1";
+    private static final String TIMELINE_TILE = "com.x.models.timelines.items.d0";
+    private static final String SCORE_CARD_CONTENT = "com.x.models.timelines.items.o";
 
     /**
      * X 12.31 and 12.32 timeline items implement an interface whose public c() method returns the
@@ -57,12 +60,13 @@ public final class RecommendationFilter {
     public static boolean hide(Object item) {
         if (item == null) return false;
 
+        if (Setup.HIDE_SPORTS_SCORES && isSportsScoreTile(item)) return true;
+
         String entryId = entryId(item);
         if (entryId == null) return false;
 
         return (Setup.HIDE_WHO_TO_FOLLOW && entryId.startsWith(WHO_TO_FOLLOW_PREFIX))
-                || (Setup.HIDE_FIND_MORE && isFindMoreEntryId(entryId))
-                || (Setup.HIDE_SPORTS_SCORES && isSportsScoreEntryId(entryId));
+                || (Setup.HIDE_FIND_MORE && isFindMoreEntryId(entryId));
     }
 
     static boolean isFindMoreEntryId(String entryId) {
@@ -71,17 +75,30 @@ public final class RecommendationFilter {
                         entryId.startsWith(FIND_MORE_POST_DETAIL_PREFIX));
     }
 
-    /** Only suppress dedicated score modules, never ordinary tweet/conversation IDs. */
-    static boolean isSportsScoreEntryId(String entryId) {
-        if (entryId == null) return false;
-        if (entryId.startsWith("tweet-") || entryId.startsWith("tweetdetail") ||
-                entryId.startsWith("conversationthread-") || entryId.startsWith("search-")) return false;
+    /**
+     * Filter only the structurally verified Home timeline score-card tile.
+     * X can use any entry ID, team name or event ID without affecting the match.
+     * If a future app version changes obfuscated model names/fields, fail open.
+     */
+    static boolean isSportsScoreTile(Object item) {
+        if (item == null || !TIMELINE_TILE_ITEM.equals(item.getClass().getName())) return false;
 
-        for (String prefix : SPORTS_SCORE_PREFIXES) {
-            if (entryId.equals(prefix) || entryId.startsWith(prefix + "-") ||
-                    entryId.startsWith(prefix + "s-")) return true;
+        try {
+            Object tile = fieldA(item);
+            if (tile == null || !TIMELINE_TILE.equals(tile.getClass().getName())) return false;
+
+            Object content = fieldA(tile);
+            return content != null && SCORE_CARD_CONTENT.equals(content.getClass().getName());
+        } catch (ReflectiveOperationException | SecurityException ignored) {
+            // Never hide an ordinary tweet due to a changed or inaccessible model.
+            return false;
         }
-        return false;
+    }
+
+    private static Object fieldA(Object instance) throws ReflectiveOperationException {
+        Field field = instance.getClass().getDeclaredField("a");
+        field.setAccessible(true);
+        return field.get(instance);
     }
 
     public static Object filter(Object item) {
