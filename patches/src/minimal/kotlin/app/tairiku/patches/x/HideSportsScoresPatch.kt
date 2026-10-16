@@ -1,8 +1,31 @@
 package app.tairiku.patches.x
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
+import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.util.returnEarly
+import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
+import com.android.tools.smali.dexlib2.iface.reference.StringReference
+
+private const val SPORTS_PILL_FLAG = "x_lite_sports_live_game_pill_enabled"
+private const val FEATURE_SWITCH_REPOSITORY = "Lcom/x/featureswitches/FeatureSwitchesRepository;"
+
+// Confirmed against *actual* X 12.31 and 12.32 DEX:
+// com/x/spaces/bar/n.f(...): spots the SPORTS_PILL_FLAG immediately before
+// FeatureSwitchesRepository.getBoolean(String, boolean).
+// In both versions: const-string at code unit 354, invoke-interface at 356,
+// move-result v12 at 359, if-eqz v12 at 360. The other independent feature
+// switch, x_lite_livestream_pill_enabled, must be left untouched.
+private object LiveSportsPillFlagFingerprint : Fingerprint(
+    definingClass = "Lcom/x/spaces/bar/n;",
+    name = "f",
+    strings = listOf(SPORTS_PILL_FLAG),
+)
 
 private object HideSportsScoresExtensionFingerprint : Fingerprint(
     definingClass = FILTER_CLASS,
@@ -12,12 +35,46 @@ private object HideSportsScoresExtensionFingerprint : Fingerprint(
 @Suppress("unused")
 val hideSportsScoresPatch = bytecodePatch(
     name = "Hide sports scores",
-    description = "Experimental: hides live sports score/scoreboard modules in the Home timeline.",
+    description = "Experimental: hides live sports game pills at the top of X Home, preserving live-stream pills.",
 ) {
     compatibleWith(COMPATIBILITY_X)
     dependsOn(recommendationFilterPatch)
 
     execute {
+        // Retain the existing ScoreCard tile filter for timeline-inserted game cards.
         HideSportsScoresExtensionFingerprint.method.returnEarly(true)
+
+        // The Home header's game pill is NOT rendered through the timeline cache/store hook.
+        // Override only the sports game's feature-switch result before its dedicated
+        // if-eqz branch; do not change the shared FeatureSwitchesRepository or other pills.
+        LiveSportsPillFlagFingerprint.method.apply {
+            val instructions = instructions
+            val flagIndex = instructions.indexOfFirst { instruction ->
+                instruction.opcode == Opcode.CONST_STRING &&
+                    ((instruction as? ReferenceInstruction)?.reference as? StringReference)
+                        ?.string == SPORTS_PILL_FLAG
+            }
+            check(flagIndex >= 0) { "Sports game pill feature flag missing" }
+
+            val featureSwitchCall = instructions.getOrNull(flagIndex + 1)
+            val ref = (featureSwitchCall as? ReferenceInstruction)?.reference as? MethodReference
+            check(featureSwitchCall?.opcode == Opcode.INVOKE_INTERFACE &&
+                ref?.definingClass == FEATURE_SWITCH_REPOSITORY &&
+                ref.name == "getBoolean" &&
+                ref.returnType == "Z" &&
+                ref.parameterTypes.map { it.toString() } == listOf("Ljava/lang/String;", "Z")) {
+                "Sports pill feature-switch call changed: fail closed at build time"
+            }
+
+            val resultIndex = flagIndex + 2
+            check(instructions.getOrNull(resultIndex)?.opcode == Opcode.MOVE_RESULT) {
+                "Sports pill feature-switch result changed: fail closed at build time"
+            }
+            val resultRegister = getInstruction<OneRegisterInstruction>(resultIndex).registerA
+            check(resultRegister <= 15) { "const/4 cannot address sports pill result register $resultRegister" }
+
+            // Insert *after* move-result (not between invoke and move-result).
+            addInstructions(resultIndex + 1, "const/4 v$resultRegister, 0x0")
+        }
     }
 }
