@@ -47,8 +47,8 @@ assert candidate is not None and candidate["version"] == build_version, (
 if candidate is not stable:
     assert "-beta." in build_version, "A nonstable manifest must use a distinct beta version"
     assert stable["version"] != build_version, "Do not overwrite an existing stable version with a beta"
-    assert len(patches["patches"]) == 4, "Scorecard beta must contain all four X patches"
+    assert len(patches["patches"]) == 5, "Experimental beta must contain all five X patches"
     assert {p["name"] for p in patches["patches"]} == {
-        "Hide sports scores", "Hide Who to follow", "Hide Find more", "Fix external post links"
-    }, "Scorecard beta patch list must preserve all three stable patches"
+        "Hide sports scores", "Hide Who to follow", "Hide Find more", "Fix external post links", "Hide search relevance prompt"
+    }, "Beta patch list must preserve all previous patches"
 print(f"Candidate bundle {build_version}: PASS")
