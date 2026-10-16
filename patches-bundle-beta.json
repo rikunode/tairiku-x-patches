@@ -1,0 +1,7 @@
+{
+  "created_at": "2026-10-16T10:30:00",
+  "description": "## 1.12.0-tairiku.4-beta.1 — experimental\n\n### X: 4 patches\n\n* **Hide sports scores** (NEW): selectively hides Home timeline ScoreCard tiles. X 12.31/12.32 DEX structure identified and CI regression tests pass; real device UI test remains pending.\n* Retains Fix external post links, Hide Find more, and Hide Who to follow.\n* Beta for user testing only; stable source v1.12.0-tairiku.3 remains unchanged.",
+  "download_url": "https://github.com/rikunode/tairiku-x-patches/releases/download/v1.12.0-tairiku.4-beta.1/patches-1.12.0-tairiku.4-beta.1.mpp",
+  "signature_download_url": "",
+  "version": "1.12.0-tairiku.4-beta.1"
+}
