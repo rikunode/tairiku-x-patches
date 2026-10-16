@@ -20,12 +20,17 @@ The `Hide sports scores` extension tests precisely the `w1.a -> d0.a -> o` chain
 
 **The APK inspection supports structural targeting but does not prove the screenshot's score bar is rendered from that exact hooked model on a logged-in device.** Do not mark actual UI removal as verified without a patched X Home screenshot.
 
-## Public experimental beta source
+## Public experimental beta — native Morphe prerelease switch
 
-The user authorized publishing a beta **before** on-device confirmation. This is a distinct prerelease (`1.12.0-tairiku.4-beta.1`) with its own `patches-bundle-beta.json` hosted on this feature branch. The stable `main/patches-bundle.json` stays at v1.12.0-tairiku.3. A successful CI build and published prerelease do not count as verification that the teal Home tile disappears.
+The user authorized a public experimental prerelease before on-device confirmation. Morphe Manager's JsonPatchBundle switches the original source URL from `main/patches-bundle.json` to `dev/patches-bundle.json` when **Use pre-release patches** is enabled. It compares the two versions and picks the newer; consequently `1.12.1-tairiku.4-beta.1` has a higher numeric base than stable `1.12.0-tairiku.3` and wins the comparison.
 
-Morphe beta source (temporary): `https://raw.githubusercontent.com/rikunode/tairiku-x-patches/feat/x-hide-sports-scores-20261016/patches-bundle-beta.json`.
-Disable the overlapping stable source for the X app during beta testing, to avoid duplicate patch classes/names. Confirm the new package displays four patch names, and choose `Hide sports scores`.
+Existing Tairiku source remains: `https://raw.githubusercontent.com/rikunode/tairiku-x-patches/main/patches-bundle.json`. Beta manifest: `https://raw.githubusercontent.com/rikunode/tairiku-x-patches/dev/patches-bundle.json`.
+
+Switch the source back to stable by turning **Use pre-release patches** off. No separate source install, disable, or reconfiguration is necessary.
+
+Published prerelease tag: `v1.12.1-tairiku.4-beta.1`. CI and artifact checks must succeed before the user is told it is ready.
+
+The earlier `1.12.0-tairiku.4-beta.1` experimental asset and feature branch remain only as historical snapshots, not the native Manager's prerelease channel.
 
 ## Stable release gate
 Keep this PR as an experimental draft until:
