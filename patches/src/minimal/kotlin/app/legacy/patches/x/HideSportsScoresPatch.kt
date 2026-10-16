@@ -60,9 +60,9 @@ val hideSportsScoresPatch = bytecodePatch(
             val ref = (featureSwitchCall as? ReferenceInstruction)?.reference as? MethodReference
             check(featureSwitchCall?.opcode == Opcode.INVOKE_INTERFACE &&
                 ref?.definingClass == FEATURE_SWITCH_REPOSITORY &&
-                ref.name == "getBoolean" &&
-                ref.returnType == "Z" &&
-                ref.parameterTypes.map { it.toString() } == listOf("Ljava/lang/String;", "Z")) {
+                ref?.name == "getBoolean" &&
+                ref?.returnType == "Z" &&
+                ref?.parameterTypes?.map { it.toString() } == listOf("Ljava/lang/String;", "Z")) {
                 "Sports pill feature-switch call changed: fail closed at build time"
             }
 
