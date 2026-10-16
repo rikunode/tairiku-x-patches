@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.12.1-tairiku.4-beta.1",
+  "version": "1.12.1-tairiku.4-beta.2",
   "patches": [
     {
       "name": "Fix external post links",
@@ -106,7 +106,7 @@
     },
     {
       "name": "Hide sports scores",
-      "description": "Experimental: hides live sports score/scoreboard modules in the Home timeline.",
+      "description": "Experimental: hides live sports game pills at the top of X Home, preserving live-stream pills.",
       "default": true,
       "category": null,
       "dependencies": [],
