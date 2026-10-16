@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-16T12:20:00",
-  "description": "## 1.12.1-tairiku.4-beta.2 (experimental, 2026-10-16)\n\n### X — 4 patches\n\n* Hide sports scores (beta2): targets Home header's dedicated `x_lite_sports_live_game_pill_enabled` decision rather than just the timeline ScoreCard; leaves livestream feature switch alone. Verified static DEX instructions in X 12.31 / 12.32. User device confirmation still pending.\n* Fix external post links, Hide Find more, Hide Who to follow: preserved.\n\nToggle 'Use pre-release patches' off to restore stable v1.12.0-tairiku.3.",
-  "download_url": "https://github.com/rikunode/tairiku-x-patches/releases/download/v1.12.1-tairiku.4-beta.2/patches-1.12.1-tairiku.4-beta.2.mpp",
+  "created_at": "2026-10-16T12:28:00",
+  "description": "## 1.12.1-tairiku.4-beta.3 (experimental, 2026-10-16)\n\n### X — 4 patches\n\n* Hide sports scores (beta3): targets Home header's dedicated `x_lite_sports_live_game_pill_enabled` decision rather than just the timeline ScoreCard; leaves livestream feature switch alone. Verified static DEX instructions in X 12.31 / 12.32. User device confirmation still pending.\n* Fix external post links, Hide Find more, Hide Who to follow: preserved.\n\nToggle 'Use pre-release patches' off to restore stable v1.12.0-tairiku.3.\n* Beta3 additionally validates the getBoolean input/output register flow and skip-branch opcode to avoid changing a different feature. The previous beta failed to hide the Home sports pill.",
+  "download_url": "https://github.com/rikunode/tairiku-x-patches/releases/download/v1.12.1-tairiku.4-beta.3/patches-1.12.1-tairiku.4-beta.3.mpp",
   "signature_download_url": "",
-  "version": "1.12.1-tairiku.4-beta.2"
+  "version": "1.12.1-tairiku.4-beta.3"
 }
