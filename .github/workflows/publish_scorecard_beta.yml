@@ -1,0 +1,109 @@
+name: Publish experimental scorecard beta
+
+on:
+  push:
+    branches:
+      - feat/x-hide-sports-scores-20261016
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: x-scorecard-beta-release
+  cancel-in-progress: false
+
+jobs:
+  publish-beta:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: read
+    steps:
+      - name: Checkout the feature branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preflight branch, version, and remote-source metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "feat/x-hide-sports-scores-20261016"
+          grep -q '^version = 1.12.0-tairiku.4-beta.1$' gradle.properties
+          python3 scripts/test-morphe-metadata.py
+
+      - name: Regression tests for scores, recommendations, and external links
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/test-recommendation-filter.sh
+          python3 scripts/test-external-post-link.py
+
+      - name: Build and test the Morphe patch bundle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :patches:buildAndroid :patches:test :patches:generatePatchesList --no-daemon
+
+      - name: Inspect exact beta artifact and generated catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          version = "1.12.0-tairiku.4-beta.1"
+          catalog = json.loads(Path("patches-list.json").read_text(encoding="utf-8"))
+          assert catalog["version"] == version, catalog["version"]
+          expected = {"Hide sports scores", "Hide Who to follow", "Hide Find more", "Fix external post links"}
+          actual = {p["name"] for p in catalog["patches"]}
+          assert actual == expected, (actual, expected)
+          artifact = Path(f"patches/build/libs/patches-{version}.mpp")
+          assert artifact.is_file() and artifact.stat().st_size > 100000, artifact
+          print(f"BETATEST PASS: {version}, {len(actual)} patches, {artifact.stat().st_size} bytes")
+          PY
+          jar tf patches/build/libs/patches-1.12.0-tairiku.4-beta.1.mpp | grep -F 'app/tairiku/patches/x/HideSportsScoresPatchKt.class'
+          jar tf patches/build/libs/patches-1.12.0-tairiku.4-beta.1.mpp | grep -F 'extensions/tairiku-x.mpe'
+          sha256sum patches/build/libs/patches-1.12.0-tairiku.4-beta.1.mpp
+
+      - name: Attach CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: x-scorecard-beta-1.12.0-tairiku.4-beta.1
+          path: patches/build/libs/patches-1.12.0-tairiku.4-beta.1.mpp
+          if-no-files-found: error
+
+      - name: Publish GitHub prerelease without touching stable source
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION="1.12.0-tairiku.4-beta.1"
+          TAG="v${VERSION}"
+          ASSET="patches/build/libs/patches-${VERSION}.mpp"
+          mkdir -p "$RUNNER_TEMP/scorecard-release-check"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Existing beta release: verify asset bytes; do not replace automatically"
+          else
+            gh release create "$TAG" "$ASSET" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "Tairiku X Patches ${VERSION} (Sports ScoreCard beta)" \
+              --notes "Experimental four-patch Morphe bundle. Adds Hide sports scores, preserves the three stable patches. APK static analysis and CI tests pass; real device Home UI behavior is pending. Use the separate patches-bundle-beta.json source. No changes to stable main manifest." \
+              --prerelease
+          fi
+          gh release download "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern "patches-${VERSION}.mpp" \
+            --dir "$RUNNER_TEMP/scorecard-release-check"
+          cmp "$ASSET" "$RUNNER_TEMP/scorecard-release-check/patches-${VERSION}.mpp"
+          echo "PUBLIC BETA ASSET VERIFIED: exact byte-for-byte match with CI build"
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,tagName,isPrerelease
