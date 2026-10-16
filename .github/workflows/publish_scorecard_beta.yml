@@ -37,7 +37,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$GITHUB_REF_NAME" = "dev"
-          grep -q '^version = 1.12.1-tairiku.4-beta.3$' gradle.properties
+          grep -q '^version = 1.12.1-tairiku.4-beta.4$' gradle.properties
           python3 scripts/test-morphe-metadata.py
 
       - name: Regression tests for scores, recommendations, and external links
@@ -59,25 +59,26 @@ jobs:
           python3 - <<'PY'
           import json
           from pathlib import Path
-          version = "1.12.1-tairiku.4-beta.3"
+          version = "1.12.1-tairiku.4-beta.4"
           catalog = json.loads(Path("patches-list.json").read_text(encoding="utf-8"))
           assert catalog["version"] == version, catalog["version"]
-          expected = {"Hide sports scores", "Hide Who to follow", "Hide Find more", "Fix external post links"}
+          expected = {"Hide sports scores", "Hide Who to follow", "Hide Find more", "Fix external post links", "Hide search relevance prompt"}
           actual = {p["name"] for p in catalog["patches"]}
           assert actual == expected, (actual, expected)
           artifact = Path(f"patches/build/libs/patches-{version}.mpp")
           assert artifact.is_file() and artifact.stat().st_size > 100000, artifact
           print(f"BETATEST PASS: {version}, {len(actual)} patches, {artifact.stat().st_size} bytes")
           PY
-          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.3.mpp | grep -F 'app/tairiku/patches/x/HideSportsScoresPatchKt.class'
-          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.3.mpp | grep -F 'extensions/tairiku-x.mpe'
-          sha256sum patches/build/libs/patches-1.12.1-tairiku.4-beta.3.mpp
+          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.4.mpp | grep -F 'app/tairiku/patches/x/HideSportsScoresPatchKt.class'
+          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.4.mpp | grep -F 'app/tairiku/patches/x/HideSearchRelevancePromptPatchKt.class'
+          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.4.mpp | grep -F 'extensions/tairiku-x.mpe'
+          sha256sum patches/build/libs/patches-1.12.1-tairiku.4-beta.4.mpp
 
       - name: Attach CI artifact
         uses: actions/upload-artifact@v4
         with:
-          name: x-scorecard-beta-1.12.1-tairiku.4-beta.3
-          path: patches/build/libs/patches-1.12.1-tairiku.4-beta.3.mpp
+          name: x-scorecard-beta-1.12.1-tairiku.4-beta.4
+          path: patches/build/libs/patches-1.12.1-tairiku.4-beta.4.mpp
           if-no-files-found: error
 
       - name: Publish GitHub prerelease without touching stable source
@@ -86,7 +87,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          VERSION="1.12.1-tairiku.4-beta.3"
+          VERSION="1.12.1-tairiku.4-beta.4"
           TAG="v${VERSION}"
           ASSET="patches/build/libs/patches-${VERSION}.mpp"
           mkdir -p "$RUNNER_TEMP/scorecard-release-check"
@@ -96,8 +97,8 @@ jobs:
             gh release create "$TAG" "$ASSET" \
               --repo "$GITHUB_REPOSITORY" \
               --target "$GITHUB_SHA" \
-              --title "Tairiku X Patches ${VERSION} (Sports ScoreCard beta)" \
-              --notes "Experimental four-patch Morphe bundle. Adds Hide sports scores, preserves the three stable patches. APK static analysis and CI tests pass; real device Home UI behavior is pending. Use the separate patches-bundle-beta.json source. No changes to stable main manifest." \
+              --title "Tairiku X Patches ${VERSION} (Search RelevancePrompt beta)" \
+              --notes "Experimental five-patch Morphe bundle. Adds Hide search relevance prompt to hide the Search results yes/no survey. Preserves four previous patches. Static X 12.31/12.32 APK model evidence and CI tests pass; user device testing is pending. Existing Morphe source with prerelease toggle reads dev/patches-bundle.json. Stable main remains unchanged." \
               --prerelease
           fi
           gh release download "$TAG" \
