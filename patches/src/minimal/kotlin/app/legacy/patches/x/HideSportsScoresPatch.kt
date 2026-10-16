@@ -7,6 +7,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -24,7 +25,13 @@ private const val FEATURE_SWITCH_REPOSITORY = "Lcom/x/featureswitches/FeatureSwi
 private object LiveSportsPillFlagFingerprint : Fingerprint(
     definingClass = "Lcom/x/spaces/bar/n;",
     name = "f",
+    returnType = "Lcom/x/spaces/model/d;",
     strings = listOf(SPORTS_PILL_FLAG),
+    custom = { method, _ ->
+        val params = method.parameterTypes.map { it.toString() }
+        params.size == 3 && params.first().startsWith("Lcom/x/http/spaces/") &&
+            params.drop(1) == listOf("Ljava/util/Map;", "Ljava/util/Map;")
+    },
 )
 
 private object HideSportsScoresExtensionFingerprint : Fingerprint(
@@ -48,15 +55,20 @@ val hideSportsScoresPatch = bytecodePatch(
         // Override only the sports game's feature-switch result before its dedicated
         // if-eqz branch; do not change the shared FeatureSwitchesRepository or other pills.
         LiveSportsPillFlagFingerprint.method.apply {
-            val instructions = instructions
-            val flagIndex = instructions.indexOfFirst { instruction ->
+            val opcodes = instructions
+            val flagMatches = opcodes.indices.filter { index ->
+                val instruction = opcodes[index]
                 instruction.opcode == Opcode.CONST_STRING &&
                     ((instruction as? ReferenceInstruction)?.reference as? StringReference)
                         ?.string == SPORTS_PILL_FLAG
             }
-            check(flagIndex >= 0) { "Sports game pill feature flag missing" }
+            check(flagMatches.size == 1) {
+                "Expected exactly one sports live-game pill flag, got ${flagMatches.size}"
+            }
+            val flagIndex = flagMatches.single()
+            val flagRegister = getInstruction<OneRegisterInstruction>(flagIndex).registerA
 
-            val featureSwitchCall = instructions.getOrNull(flagIndex + 1)
+            val featureSwitchCall = opcodes.getOrNull(flagIndex + 1)
             val ref = (featureSwitchCall as? ReferenceInstruction)?.reference as? MethodReference
             check(featureSwitchCall?.opcode == Opcode.INVOKE_INTERFACE &&
                 ref?.definingClass == FEATURE_SWITCH_REPOSITORY &&
@@ -66,12 +78,23 @@ val hideSportsScoresPatch = bytecodePatch(
                 "Sports pill feature-switch call changed: fail closed at build time"
             }
 
+            val invokeRegisters = featureSwitchCall as? FiveRegisterInstruction
+            check(invokeRegisters != null && invokeRegisters.registerCount == 3 &&
+                invokeRegisters.registerD == flagRegister) {
+                "Sports pill flag not passed as getBoolean string argument"
+            }
+
             val resultIndex = flagIndex + 2
-            check(instructions.getOrNull(resultIndex)?.opcode == Opcode.MOVE_RESULT) {
+            check(opcodes.getOrNull(resultIndex)?.opcode == Opcode.MOVE_RESULT) {
                 "Sports pill feature-switch result changed: fail closed at build time"
             }
             val resultRegister = getInstruction<OneRegisterInstruction>(resultIndex).registerA
             check(resultRegister <= 15) { "const/4 cannot address sports pill result register $resultRegister" }
+            val skipBranch = opcodes.getOrNull(resultIndex + 1)
+            check(skipBranch?.opcode == Opcode.IF_EQZ &&
+                (skipBranch as? OneRegisterInstruction)?.registerA == resultRegister) {
+                "Sports pill no longer skips rendering when the feature switch is false"
+            }
 
             // Insert *after* move-result (not between invoke and move-result).
             addInstructions(resultIndex + 1, "const/4 v$resultRegister, 0x0")
