@@ -37,8 +37,18 @@ for filename in manifest_paths:
     assert manifest.get("signature_download_url") in (None, ""), filename
     print(f"{filename.name}: {version} metadata PASS")
 
-candidate = json.loads((root / "patches-bundle.json").read_text(encoding="utf-8"))
-assert candidate["version"] == build_version, (
-    "Stable manifest, patch list and Gradle versions must agree"
+stable = json.loads((root / "patches-bundle.json").read_text(encoding="utf-8"))
+candidate = stable if stable["version"] == build_version else (
+    json.loads(beta.read_text(encoding="utf-8")) if beta.is_file() else None
 )
+assert candidate is not None and candidate["version"] == build_version, (
+    "Candidate stable/beta manifest, patch list and Gradle versions must agree"
+)
+if candidate is not stable:
+    assert "-beta." in build_version, "A nonstable manifest must use a distinct beta version"
+    assert stable["version"] != build_version, "Do not overwrite an existing stable version with a beta"
+    assert len(patches["patches"]) == 4, "Scorecard beta must contain all four X patches"
+    assert {p["name"] for p in patches["patches"]} == {
+        "Hide sports scores", "Hide Who to follow", "Hide Find more", "Fix external post links"
+    }, "Scorecard beta patch list must preserve all three stable patches"
 print(f"Candidate bundle {build_version}: PASS")
