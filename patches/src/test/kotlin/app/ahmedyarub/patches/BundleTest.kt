@@ -10,8 +10,8 @@ import kotlin.test.assertTrue
 /** Checks on the bundle that need no APK. */
 class BundleTest {
     @Test
-    fun `the bundle exposes exactly the four add-on patches`() {
-        val expected = setOf("Hide Who to follow", "Hide Find more", "Fix external post links", "Hide sports scores")
+    fun `the bundle exposes exactly the five add-on patches`() {
+        val expected = setOf("Hide Who to follow", "Hide Find more", "Fix external post links", "Hide sports scores", "Hide search relevance prompt")
         assertEquals(expected, Bundle.patches.mapNotNull { it.name }.toSet())
         assertEquals(expected, Bundle.loadedPatchNames)
     }
