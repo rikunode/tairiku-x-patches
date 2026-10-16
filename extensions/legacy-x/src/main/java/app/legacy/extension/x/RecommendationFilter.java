@@ -80,9 +80,24 @@ public final class RecommendationFilter {
                 || (Setup.HIDE_FIND_MORE && isFindMoreEntryId(entryId));
     }
 
-    /** Exact class match: retain all ordinary search results and posts mentioning relevance. */
+    /**
+     * Guard on the actual X 12.31/12.32 model structure as well as its obfuscated
+     * class name: m1.a is TimelineRelevancePrompt (com.x.models.jf) and m1.c()
+     * returns the URT item ID. If obfuscation changes, leave the item visible.
+     * No text-based matching, no global search-survey suppression.
+     */
     static boolean isSearchRelevancePrompt(Object item) {
-        return item != null && SEARCH_RELEVANCE_ITEM.equals(item.getClass().getName());
+        if (item == null || !SEARCH_RELEVANCE_ITEM.equals(item.getClass().getName())) return false;
+        try {
+            Class<?> type = item.getClass();
+            Field content = type.getDeclaredField("a");
+            Method id = type.getMethod("c");
+            return "com.x.models.jf".equals(content.getType().getName())
+                    && id.getParameterCount() == 0 && id.getReturnType() == String.class;
+        } catch (ReflectiveOperationException | SecurityException ignored) {
+            // Unknown X version: fail open rather than hide an unrelated search result.
+            return false;
+        }
     }
 
     static boolean isFindMoreEntryId(String entryId) {
