@@ -6,8 +6,10 @@ package com.x.models.timelines.items;
  * Test-only; not included in the Android extension.
  */
 public final class m1 {
+    private final com.x.models.jf a;
     private final String entryId;
     public m1(String entryId) {
+        this.a = new com.x.models.jf();
         this.entryId = entryId;
     }
     public String c() {
