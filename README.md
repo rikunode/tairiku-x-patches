@@ -4,9 +4,13 @@
 
 ## Add to Morphe
 
-This repository is public. In Morphe's remote source field, add the repository URL:
+[**Add Tairiku X Patches to Morphe (one tap)**](https://morphe.software/add-source?github=rikunode/tairiku-x-patches)
+
+Or paste this public repository into Morphe Manager's remote patch-source field:
 
 https://github.com/rikunode/tairiku-x-patches
+
+The public source provides [patches-bundle.json](patches-bundle.json) and [patches-list.json](patches-list.json) at the repository root, with a downloadable `.mpp` in the [stable v1.12.0-tairiku.3 release](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.3).
 
 ## Stable external-post-link fix (v1.12.0-tairiku.3)
 
