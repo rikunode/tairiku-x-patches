@@ -30,6 +30,16 @@ public final class RecommendationFilterTest {
         expectSportsVisible(new TimelineItem("tweet-123456"));
         expectSportsVisible(null);
 
+        // Search relevance survey is its own URT item, never an ordinary post.
+        expectPromptHidden(new com.x.models.timelines.items.m1("relevance-prompt-42"));
+        expectPromptHidden(new com.x.models.timelines.items.m1(null));
+        expectPromptVisible(new TimelineItem("relevance-prompt-42"));
+        expectPromptVisible(new TimelineItem("tweet-1"));
+        expectPromptVisible(com.x.models.timelines.items.TimelineTileFixtures.scoreCard());
+        expectPromptVisible(com.x.models.timelines.items.TimelineTileFixtures.standardTile());
+        expectPromptVisible(com.x.models.timelines.items.TimelineTileFixtures.misleadingText());
+        expectPromptVisible(null);
+
         // Check the model's verified entry-id accessor remains usable.
         java.lang.reflect.Method accessor = RecommendationFilter.class
                 .getDeclaredMethod("entryId", Object.class);
@@ -38,7 +48,7 @@ public final class RecommendationFilterTest {
         if (!"tweetdetail-42".equals(id)) {
             throw new AssertionError("Entry-id accessor stopped finding a public c() method");
         }
-        System.out.println("RecommendationFilter: recommended item IDs and native ScoreCard tile structure passed");
+        System.out.println("RecommendationFilter: entry IDs, native ScoreCard and Search RelevancePrompt type passed");
     }
 
     private static void expectHidden(String id) {
@@ -62,6 +72,18 @@ public final class RecommendationFilterTest {
     private static void expectSportsVisible(Object item) {
         if (RecommendationFilter.isSportsScoreTile(item)) {
             throw new AssertionError("Unrelated timeline item would be hidden: " + item);
+        }
+    }
+
+    private static void expectPromptHidden(Object item) {
+        if (!RecommendationFilter.isSearchRelevancePrompt(item)) {
+            throw new AssertionError("Search relevance survey was not recognized");
+        }
+    }
+
+    private static void expectPromptVisible(Object item) {
+        if (RecommendationFilter.isSearchRelevancePrompt(item)) {
+            throw new AssertionError("Ordinary timeline item would be hidden: " + item);
         }
     }
 
