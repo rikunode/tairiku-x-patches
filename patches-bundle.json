@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-12T14:47:04",
-  "description": "## 1.12.0-tairiku.3 (stable, 2026-10-12)\n\n### X — 3 patches\n\n* **Fix external post links:** Open external X status URLs directly as post details instead of falling back to Home when the For You/Following tabs are hidden. Verified by user screenshot on a patched Android phone on 2026-10-12.\n* **Hide Find more:** Narrow recommendation filtering to the related-tweets module and Search recommendations, avoiding the generic tweetdetail entry prefix.\n* **Hide Who to follow:** Preserve hiding recommended accounts.\n* Verified against X 12.31.0-prod.01 and 12.32.0-prod.01 APK fingerprints and patch application. URL parser regression tests, Gradle bundle tests, and CI build must pass. Other deep-link variants and Android versions are not separately verified.",
-  "download_url": "https://github.com/rikunode/tairiku-x-patches/releases/download/v1.12.0-tairiku.3/patches-1.12.0-tairiku.3.mpp",
+  "created_at": "2026-10-16T10:58:14",
+  "description": "## 1.12.1-tairiku.4-beta.1 — experimental prerelease (2026-10-16)\n\n### X — 4 patches\n\n* Hide sports scores (new): selectively hides Home timeline live sports ScoreCard tiles using an APK-verified typed model filter. Real-device results pending.\n* Fix external post links: preserves external status navigation.\n* Hide Find more: suppresses post-detail/search recommendations.\n* Hide Who to follow: suppresses recommended account modules.\n\nFor testing: enable Use pre-release patches in the existing Tairiku X Patches source. Disable to return to stable 1.12.0-tairiku.3.",
+  "download_url": "https://github.com/rikunode/tairiku-x-patches/releases/download/v1.12.1-tairiku.4-beta.1/patches-1.12.1-tairiku.4-beta.1.mpp",
   "signature_download_url": "",
-  "version": "1.12.0-tairiku.3"
+  "version": "1.12.1-tairiku.4-beta.1"
 }
