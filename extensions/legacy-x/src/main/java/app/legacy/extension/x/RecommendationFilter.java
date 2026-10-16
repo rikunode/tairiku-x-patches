@@ -25,6 +25,10 @@ public final class RecommendationFilter {
     private static final String TIMELINE_TILE_ITEM = "com.x.models.timelines.items.w1";
     private static final String TIMELINE_TILE = "com.x.models.timelines.items.d0";
     private static final String SCORE_CARD_CONTENT = "com.x.models.timelines.items.o";
+    // X 12.31/12.32 UrtTimelineRelevancePrompt (the inline search feedback yes/no card).
+    // Verified in official DEX: m1.a holds com.x.models.jf (TimelineRelevancePrompt),
+    // m1.c() returns entry ID. Do not match ordinary tweet text or global search surveys.
+    private static final String SEARCH_RELEVANCE_ITEM = "com.x.models.timelines.items.m1";
 
     /**
      * X 12.31 and 12.32 timeline items implement an interface whose public c() method returns the
@@ -51,22 +55,49 @@ public final class RecommendationFilter {
         return false;
     }
 
+    /** Rewritten to true only by the Hide search relevance prompt patch. */
+    private static boolean hideSearchRelevancePrompt() {
+        return false;
+    }
+
     private static final class Setup {
         static final boolean HIDE_WHO_TO_FOLLOW = hideWhoToFollow();
         static final boolean HIDE_FIND_MORE = hideFindMore();
         static final boolean HIDE_SPORTS_SCORES = hideSportsScores();
+        static final boolean HIDE_SEARCH_RELEVANCE_PROMPT = hideSearchRelevancePrompt();
     }
 
     public static boolean hide(Object item) {
         if (item == null) return false;
 
         if (Setup.HIDE_SPORTS_SCORES && isSportsScoreTile(item)) return true;
+        if (Setup.HIDE_SEARCH_RELEVANCE_PROMPT && isSearchRelevancePrompt(item)) return true;
 
         String entryId = entryId(item);
         if (entryId == null) return false;
 
         return (Setup.HIDE_WHO_TO_FOLLOW && entryId.startsWith(WHO_TO_FOLLOW_PREFIX))
                 || (Setup.HIDE_FIND_MORE && isFindMoreEntryId(entryId));
+    }
+
+    /**
+     * Guard on the actual X 12.31/12.32 model structure as well as its obfuscated
+     * class name: m1.a is TimelineRelevancePrompt (com.x.models.jf) and m1.c()
+     * returns the URT item ID. If obfuscation changes, leave the item visible.
+     * No text-based matching, no global search-survey suppression.
+     */
+    static boolean isSearchRelevancePrompt(Object item) {
+        if (item == null || !SEARCH_RELEVANCE_ITEM.equals(item.getClass().getName())) return false;
+        try {
+            Class<?> type = item.getClass();
+            Field content = type.getDeclaredField("a");
+            Method id = type.getMethod("c");
+            return "com.x.models.jf".equals(content.getType().getName())
+                    && id.getParameterCount() == 0 && id.getReturnType() == String.class;
+        } catch (ReflectiveOperationException | SecurityException ignored) {
+            // Unknown X version: fail open rather than hide an unrelated search result.
+            return false;
+        }
     }
 
     static boolean isFindMoreEntryId(String entryId) {
