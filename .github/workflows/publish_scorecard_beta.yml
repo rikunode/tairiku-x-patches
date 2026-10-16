@@ -37,7 +37,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$GITHUB_REF_NAME" = "dev"
-          grep -q '^version = 1.12.1-tairiku.4-beta.1$' gradle.properties
+          grep -q '^version = 1.12.1-tairiku.4-beta.2$' gradle.properties
           python3 scripts/test-morphe-metadata.py
 
       - name: Regression tests for scores, recommendations, and external links
@@ -59,7 +59,7 @@ jobs:
           python3 - <<'PY'
           import json
           from pathlib import Path
-          version = "1.12.1-tairiku.4-beta.1"
+          version = "1.12.1-tairiku.4-beta.2"
           catalog = json.loads(Path("patches-list.json").read_text(encoding="utf-8"))
           assert catalog["version"] == version, catalog["version"]
           expected = {"Hide sports scores", "Hide Who to follow", "Hide Find more", "Fix external post links"}
@@ -69,15 +69,15 @@ jobs:
           assert artifact.is_file() and artifact.stat().st_size > 100000, artifact
           print(f"BETATEST PASS: {version}, {len(actual)} patches, {artifact.stat().st_size} bytes")
           PY
-          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.1.mpp | grep -F 'app/tairiku/patches/x/HideSportsScoresPatchKt.class'
-          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.1.mpp | grep -F 'extensions/tairiku-x.mpe'
-          sha256sum patches/build/libs/patches-1.12.1-tairiku.4-beta.1.mpp
+          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.2.mpp | grep -F 'app/tairiku/patches/x/HideSportsScoresPatchKt.class'
+          jar tf patches/build/libs/patches-1.12.1-tairiku.4-beta.2.mpp | grep -F 'extensions/tairiku-x.mpe'
+          sha256sum patches/build/libs/patches-1.12.1-tairiku.4-beta.2.mpp
 
       - name: Attach CI artifact
         uses: actions/upload-artifact@v4
         with:
-          name: x-scorecard-beta-1.12.1-tairiku.4-beta.1
-          path: patches/build/libs/patches-1.12.1-tairiku.4-beta.1.mpp
+          name: x-scorecard-beta-1.12.1-tairiku.4-beta.2
+          path: patches/build/libs/patches-1.12.1-tairiku.4-beta.2.mpp
           if-no-files-found: error
 
       - name: Publish GitHub prerelease without touching stable source
@@ -86,7 +86,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          VERSION="1.12.1-tairiku.4-beta.1"
+          VERSION="1.12.1-tairiku.4-beta.2"
           TAG="v${VERSION}"
           ASSET="patches/build/libs/patches-${VERSION}.mpp"
           mkdir -p "$RUNNER_TEMP/scorecard-release-check"
