@@ -12,6 +12,8 @@ import app.morphe.util.returnEarly
 private object HideSearchRelevancePromptExtensionFingerprint : Fingerprint(
     definingClass = FILTER_CLASS,
     name = "hideSearchRelevancePrompt",
+    returnType = "Z",
+    parameters = emptyList(),
 )
 
 @Suppress("unused")
