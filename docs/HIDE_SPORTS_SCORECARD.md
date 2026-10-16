@@ -20,6 +20,13 @@ The `Hide sports scores` extension tests precisely the `w1.a -> d0.a -> o` chain
 
 **The APK inspection supports structural targeting but does not prove the screenshot's score bar is rendered from that exact hooked model on a logged-in device.** Do not mark actual UI removal as verified without a patched X Home screenshot.
 
+## Public experimental beta source
+
+The user authorized publishing a beta **before** on-device confirmation. This is a distinct prerelease (`1.12.0-tairiku.4-beta.1`) with its own `patches-bundle-beta.json` hosted on this feature branch. The stable `main/patches-bundle.json` stays at v1.12.0-tairiku.3. A successful CI build and published prerelease do not count as verification that the teal Home tile disappears.
+
+Morphe beta source (temporary): `https://raw.githubusercontent.com/rikunode/tairiku-x-patches/feat/x-hide-sports-scores-20261016/patches-bundle-beta.json`.
+Disable the overlapping stable source for the X app during beta testing, to avoid duplicate patch classes/names. Confirm the new package displays four patch names, and choose `Hide sports scores`.
+
 ## Stable release gate
 Keep this PR as an experimental draft until:
 1. X 12.31/12.32 APK patch application and launch succeeds.
