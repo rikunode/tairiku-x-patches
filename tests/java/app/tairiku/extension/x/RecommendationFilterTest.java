@@ -19,6 +19,27 @@ public final class RecommendationFilterTest {
         expectVisible("cursor-bottom-0");
         expectVisible(null);
 
+        // Verify the exact X 12.31/12.32 tile model chain, not guessed entry prefixes.
+        expectSportsHidden(com.x.models.timelines.items.TimelineTileFixtures.scoreCard());
+        expectSportsVisible(com.x.models.timelines.items.TimelineTileFixtures.standardTile());
+        expectSportsVisible(com.x.models.timelines.items.TimelineTileFixtures.missingContent());
+        expectSportsVisible(com.x.models.timelines.items.TimelineTileFixtures.missingTile());
+        expectSportsVisible(com.x.models.timelines.items.TimelineTileFixtures.misleadingText());
+        expectSportsVisible(new TimelineItem("scoreboard-mlb-123"));
+        expectSportsVisible(new TimelineItem("sports-score-mlb-123"));
+        expectSportsVisible(new TimelineItem("tweet-123456"));
+        expectSportsVisible(null);
+
+        // Search relevance survey is its own URT item, never an ordinary post.
+        expectPromptHidden(new com.x.models.timelines.items.m1("relevance-prompt-42"));
+        expectPromptHidden(new com.x.models.timelines.items.m1(null));
+        expectPromptVisible(new TimelineItem("relevance-prompt-42"));
+        expectPromptVisible(new TimelineItem("tweet-1"));
+        expectPromptVisible(com.x.models.timelines.items.TimelineTileFixtures.scoreCard());
+        expectPromptVisible(com.x.models.timelines.items.TimelineTileFixtures.standardTile());
+        expectPromptVisible(com.x.models.timelines.items.TimelineTileFixtures.misleadingText());
+        expectPromptVisible(null);
+
         // Check the model's verified entry-id accessor remains usable.
         java.lang.reflect.Method accessor = RecommendationFilter.class
                 .getDeclaredMethod("entryId", Object.class);
@@ -27,7 +48,7 @@ public final class RecommendationFilterTest {
         if (!"tweetdetail-42".equals(id)) {
             throw new AssertionError("Entry-id accessor stopped finding a public c() method");
         }
-        System.out.println("RecommendationFilter: 11 entry-id cases and accessor passed");
+        System.out.println("RecommendationFilter: entry IDs, native ScoreCard and Search RelevancePrompt type passed");
     }
 
     private static void expectHidden(String id) {
@@ -39,6 +60,30 @@ public final class RecommendationFilterTest {
     private static void expectVisible(String id) {
         if (RecommendationFilter.isFindMoreEntryId(id)) {
             throw new AssertionError("Unrelated timeline entry would be hidden: " + id);
+        }
+    }
+
+    private static void expectSportsHidden(Object item) {
+        if (!RecommendationFilter.isSportsScoreTile(item)) {
+            throw new AssertionError("Expected score-card tile to be filtered: " + item);
+        }
+    }
+
+    private static void expectSportsVisible(Object item) {
+        if (RecommendationFilter.isSportsScoreTile(item)) {
+            throw new AssertionError("Unrelated timeline item would be hidden: " + item);
+        }
+    }
+
+    private static void expectPromptHidden(Object item) {
+        if (!RecommendationFilter.isSearchRelevancePrompt(item)) {
+            throw new AssertionError("Search relevance survey was not recognized");
+        }
+    }
+
+    private static void expectPromptVisible(Object item) {
+        if (RecommendationFilter.isSearchRelevancePrompt(item)) {
+            throw new AssertionError("Ordinary timeline item would be hidden: " + item);
         }
     }
 

@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 import kotlin.test.fail
 
 /**
- * Reproduces the intended Manager setup: Ahmed's normal X patches plus this two-patch add-on source.
+ * Reproduces the intended Manager setup: Ahmed's normal X patches plus this unified add-on source.
  *
  * Run with:
  *   -Pmorphe.cross.x31=<base.apk>
@@ -23,7 +23,7 @@ import kotlin.test.fail
 @Tag("crossBundle")
 class CrossBundleCoexistenceTest {
     @TestFactory
-    fun `the two add-on patches coexist with Ahmed`(): List<DynamicTest> {
+    fun `the unified add-on patches coexist with Ahmed`(): List<DynamicTest> {
         val currentBundle = File(System.getProperty("morphe.bundle"))
         val keys =
             listOf(
@@ -62,7 +62,7 @@ class CrossBundleCoexistenceTest {
                 val loaded = lines.firstOrNull { it.startsWith("SELECTED\t") }
                     ?.substringAfter('\t')?.toIntOrNull()
 
-                assertEquals(23, loaded, "Expected Ahmed 20 + X Patch 3 selected patches")
+                assertEquals(25, loaded, "Expected Ahmed 20 + X Patch 5 selected patches")
                 assertTrue(missing.isEmpty(), missing.joinToString("\n"))
                 assertTrue(collisions.isEmpty(), collisions.joinToString("\n"))
                 assertTrue(failures.isEmpty(), failures.joinToString("\n"))
@@ -114,7 +114,7 @@ object CrossBundleRunner {
             "Show sensitive media",
         )
 
-    private val TAIRIKU_PATCHES = setOf("Hide Who to follow", "Hide Find more", "Copy media URL")
+    private val TAIRIKU_PATCHES = setOf("Hide Who to follow", "Hide Find more", "Copy media URL", "Hide sports scores", "Hide search relevance prompt")
     private val SELECTED = AHMED_PATCHES + TAIRIKU_PATCHES
 
     @JvmStatic
