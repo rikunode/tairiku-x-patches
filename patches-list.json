@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.12.0-tairiku.3",
+  "version": "1.12.1-x.1",
   "patches": [
     {
       "name": "Fix external post links",
@@ -73,6 +73,40 @@
     {
       "name": "Hide Who to follow",
       "description": "Hides Who to follow / recommended-account modules from timelines.",
+      "default": true,
+      "category": null,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "X",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "12.31.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.32.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Copy media URL",
+      "description": "Copies direct photo, video, and GIF URLs from a post's options menu.",
       "default": true,
       "category": null,
       "dependencies": [],
