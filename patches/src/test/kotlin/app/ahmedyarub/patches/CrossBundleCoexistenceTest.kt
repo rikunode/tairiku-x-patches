@@ -62,7 +62,7 @@ class CrossBundleCoexistenceTest {
                 val loaded = lines.firstOrNull { it.startsWith("SELECTED\t") }
                     ?.substringAfter('\t')?.toIntOrNull()
 
-                assertEquals(22, loaded, "Expected Ahmed 20 + Tairiku 2 selected patches")
+                assertEquals(23, loaded, "Expected Ahmed 20 + X Patch 3 selected patches")
                 assertTrue(missing.isEmpty(), missing.joinToString("\n"))
                 assertTrue(collisions.isEmpty(), collisions.joinToString("\n"))
                 assertTrue(failures.isEmpty(), failures.joinToString("\n"))
@@ -114,7 +114,7 @@ object CrossBundleRunner {
             "Show sensitive media",
         )
 
-    private val TAIRIKU_PATCHES = setOf("Hide Who to follow", "Hide Find more")
+    private val TAIRIKU_PATCHES = setOf("Hide Who to follow", "Hide Find more", "Copy media URL")
     private val SELECTED = AHMED_PATCHES + TAIRIKU_PATCHES
 
     @JvmStatic

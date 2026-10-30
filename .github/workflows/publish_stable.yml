@@ -2,8 +2,13 @@ name: Publish stable Morphe patch
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*-tairiku.*'
+      - 'v*-x.*'
+    paths:
+      - 'patches-bundle.json'
 
 permissions:
   contents: write
@@ -23,12 +28,24 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Resolve release version
+        id: release_version
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF" == 'refs/heads/main' ]]; then
+            version="$(sed -n 's/^version = //p' gradle.properties)"
+          else
+            version="${GITHUB_REF_NAME#v}"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
       - name: Validate stable manifest and existing tests
         shell: bash
         run: |
           set -euo pipefail
-          version="${GITHUB_REF_NAME#v}"
-          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-tairiku\.[0-9]+$ ]]
+          version="${{ steps.release_version.outputs.version }}"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-(tairiku|x)\.[0-9]+$ ]]
           test "$version" = "$(sed -n 's/^version = //p' gradle.properties)"
           python3 scripts/test-morphe-metadata.py
           bash scripts/test-recommendation-filter.sh
@@ -37,9 +54,9 @@ jobs:
           import json
           patches = json.load(open('patches-list.json', encoding='utf-8'))
           actual = {p['name'] for p in patches['patches']}
-          expected = {'Fix external post links', 'Hide Find more', 'Hide Who to follow'}
+          expected = {'Fix external post links', 'Hide Find more', 'Hide Who to follow', 'Copy media URL'}
           assert actual == expected, (actual, expected)
-          print('Stable manifest has exactly three X patches: PASS')
+          print('Stable manifest has exactly four X patches: PASS')
           PY
 
       - name: Build and test release bundle
@@ -51,7 +68,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version="${GITHUB_REF_NAME#v}"
+          version="${{ steps.release_version.outputs.version }}"
           test -s "patches/build/libs/patches-$version.mpp"
           unzip -t "patches/build/libs/patches-$version.mpp" >/dev/null
           sha256sum "patches/build/libs/patches-$version.mpp"
@@ -62,12 +79,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version="${GITHUB_REF_NAME#v}"
-          gh release create "$GITHUB_REF_NAME" \
+          version="${{ steps.release_version.outputs.version }}"
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "::error::Release v$version already exists; refusing to overwrite immutable assets"
+            exit 1
+          fi
+          gh release create "v$version" \
             "patches/build/libs/patches-$version.mpp" \
             patches-bundle.json \
             --target "$GITHUB_SHA" \
             --title "$version (stable)" \
-            --notes "Stable release: Fix external post links verified in an on-device screenshot with hidden For You tab. Includes Hide Find more and Hide Who to follow. Source-import and app startup/link handling on other APK versions should still be tested before generalizing."
-          gh release view "$GITHUB_REF_NAME" --json tagName,isPrerelease,assets \
+            --notes "X Patch adds an optional Copy media URL action in post options and retains existing link and recommendation improvements. The new copy action and media viewer behavior have not yet been validated on an actual device."
+          gh release view "v$version" --json tagName,isPrerelease,assets \
             --jq '{tag: .tagName, prerelease: .isPrerelease, assets: [.assets[].name]}'
