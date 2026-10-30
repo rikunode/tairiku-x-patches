@@ -1,6 +1,8 @@
 package app.tairiku.extension.x;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.net.Uri;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -8,6 +10,7 @@ import android.widget.Toast;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -103,6 +106,73 @@ public final class MediaLinkMenu {
             // Preserve X's original selection handling on unknown versions.
         }
         return false;
+    }
+
+
+    /**
+     * Video player download entry point. The direct CDN URL is obtained from the
+     * downloader's media argument, not from the post URL or preview image.
+     *
+     * Returns false when the expected X internals cannot be resolved, so the
+     * original video-save action remains available and unchanged.
+     */
+    public static boolean handleVideoDownload(Object downloader, Object media) {
+        if (downloader == null || media == null) return false;
+        try {
+            Field urlField = media.getClass().getDeclaredField("a");
+            urlField.setAccessible(true);
+            Object value = urlField.get(media);
+            if (!(value instanceof String)) return false;
+            final String url = (String) value;
+            Uri parsed = Uri.parse(url);
+            String host = parsed.getHost();
+            if (!"https".equalsIgnoreCase(parsed.getScheme()) || host == null ||
+                !(host.equals("video.twimg.com") || host.equals("pbs.twimg.com")
+                    || host.equals("ton.twimg.com"))) return false;
+
+            // Piko documents the unmodified native video save method as b(media).
+            // If it cannot be located, do not replace the native download path.
+            Method save = downloader.getClass().getDeclaredMethod("b", media.getClass());
+            save.setAccessible(true);
+            Activity context = activity.get();
+            if (context == null || context.isFinishing() || context.isDestroyed()) {
+                Field activityField = downloader.getClass().getDeclaredField("a");
+                activityField.setAccessible(true);
+                Object valueContext = activityField.get(downloader);
+                context = valueContext instanceof Activity ? (Activity) valueContext : null;
+            }
+            if (context == null || context.isFinishing() || context.isDestroyed()) return false;
+            final Activity screen = context;
+            boolean japanese = "ja".equals(java.util.Locale.getDefault().getLanguage());
+            String[] options = japanese
+                    ? new String[]{"動画を保存", "メディアURLをコピー"}
+                    : new String[]{"Save video", "Copy media URL"};
+            new AlertDialog.Builder(screen)
+                    .setItems(options, (dialog, which) -> {
+                        if (which == 0) {
+                            try {
+                                save.invoke(downloader, media);
+                            } catch (Exception e) {
+                                Toast.makeText(screen, "Video save failed", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (which == 1) {
+                            ClipboardManager clipboard =
+                                    (ClipboardManager) screen.getSystemService(Context.CLIPBOARD_SERVICE);
+                            if (clipboard != null) {
+                                clipboard.setPrimaryClip(ClipData.newPlainText("video_url", url));
+                                Toast.makeText(screen, japanese
+                                    ? "動画のURLをコピーしました" : "Video URL copied",
+                                    Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .setNegativeButton(japanese ? "キャンセル" : "Cancel", null)
+                    .show();
+            return true;
+        } catch (ReflectiveOperationException | RuntimeException | LinkageError ignored) {
+            // Unsupported APK: retain the native download path.
+            return false;
+        }
     }
 
     /** Chooses a video's highest bit-rate MP4 and normalizes images to original size. */

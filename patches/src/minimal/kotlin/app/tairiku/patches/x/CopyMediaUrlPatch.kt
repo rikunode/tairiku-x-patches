@@ -10,10 +10,20 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.util.getReference
 import app.morphe.util.returnEarly
+import app.morphe.util.getFreeRegisterProvider
+import app.morphe.util.indexOfFirstInstruction
+import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 
 private const val MEDIA_MENU = "Lapp/tairiku/extension/x/MediaLinkMenu;"
+
+private object VideoDownloaderActionFingerprint : Fingerprint(
+    definingClass = "Lcom/twitter/downloader/",
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL),
+    returnType = "V",
+    strings = listOf("getString(...)", "isUseSnackbar"),
+)
 
 private object MediaOptionsStateFingerprint : Fingerprint(
     name = "toString",
@@ -63,6 +73,27 @@ val copyMediaUrlPatch = bytecodePatch(
             0,
             "invoke-static { p0 }, $MEDIA_MENU->setActivity(Landroid/app/Activity;)V",
         )
+
+        // Hook the same native downloader entry as Piko's verified video menu.
+        // Unlike its unconditional override, fall back to X's original save
+        // implementation if the expected media URL or activity is unavailable.
+        VideoDownloaderActionFingerprint.method.apply {
+            val insertionIndex = indexOfFirstInstruction(Opcode.IF_EQZ) + 1
+            if (insertionIndex <= 0 || insertionIndex >= instructions.size) {
+                throw PatchException("Video downloader guard was not found")
+            }
+            val free = getFreeRegisterProvider(insertionIndex, 1).getFreeRegister()
+            addInstructionsWithLabels(
+                insertionIndex,
+                """
+                invoke-static { p0, p1 }, $MEDIA_MENU->handleVideoDownload(Ljava/lang/Object;Ljava/lang/Object;)Z
+                move-result v$free
+                if-eqz v$free, :originalVideoDownload
+                return-void
+                """,
+                ExternalLabel("originalVideoDownload", getInstruction(insertionIndex)),
+            )
+        }
 
         mutableClassDefBy(MediaOptionsStateFingerprint.classDef).methods.single { method ->
             method.name == "<init>" && method.parameterTypes.firstOrNull() == "Z" &&
