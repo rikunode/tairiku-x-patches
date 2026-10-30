@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*-tairiku.*'
+      - 'v*-x.*'
 
 permissions:
   contents: write
@@ -37,9 +38,9 @@ jobs:
           import json
           patches = json.load(open('patches-list.json', encoding='utf-8'))
           actual = {p['name'] for p in patches['patches']}
-          expected = {'Fix external post links', 'Hide Find more', 'Hide Who to follow'}
+          expected = {'Fix external post links', 'Hide Find more', 'Hide Who to follow', 'Copy media URL'}
           assert actual == expected, (actual, expected)
-          print('Stable manifest has exactly three X patches: PASS')
+          print('Stable manifest has exactly four X patches: PASS')
           PY
 
       - name: Build and test release bundle
@@ -68,6 +69,6 @@ jobs:
             patches-bundle.json \
             --target "$GITHUB_SHA" \
             --title "$version (stable)" \
-            --notes "Stable release: Fix external post links verified in an on-device screenshot with hidden For You tab. Includes Hide Find more and Hide Who to follow. Source-import and app startup/link handling on other APK versions should still be tested before generalizing."
+            --notes "X Patch adds an optional Copy media URL action in post options and retains existing link and recommendation improvements. The new copy action and media viewer behavior have not yet been validated on an actual device."
           gh release view "$GITHUB_REF_NAME" --json tagName,isPrerelease,assets \
             --jq '{tag: .tagName, prerelease: .isPrerelease, assets: [.assets[].name]}'
