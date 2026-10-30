@@ -54,9 +54,9 @@ jobs:
           import json
           patches = json.load(open('patches-list.json', encoding='utf-8'))
           actual = {p['name'] for p in patches['patches']}
-          expected = {'Fix external post links', 'Hide Find more', 'Hide Who to follow', 'Copy media URL'}
+          expected = {'Fix external post links', 'Hide Find more', 'Hide Who to follow', 'Copy media URL', 'Hide sports scores', 'Hide search relevance prompt'}
           assert actual == expected, (actual, expected)
-          print('Stable manifest has exactly four X patches: PASS')
+          print('Stable manifest has exactly six X patches: PASS')
           PY
 
       - name: Build and test release bundle
@@ -89,6 +89,6 @@ jobs:
             patches-bundle.json \
             --target "$GITHUB_SHA" \
             --title "$version (stable)" \
-            --notes "X Patch adds an optional Copy media URL action in post options and retains existing link and recommendation improvements. The new copy action and media viewer behavior have not yet been validated on an actual device."
+            --notes "X Patch unifies all six opt-in features for X 12.31/12.32, including sports scores, search relevance prompts and media URL copy. On-device behavior of newer features remains unverified."
           gh release view "v$version" --json tagName,isPrerelease,assets \
             --jq '{tag: .tagName, prerelease: .isPrerelease, assets: [.assets[].name]}'

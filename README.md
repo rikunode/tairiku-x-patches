@@ -1,99 +1,30 @@
-# 🧩 X Patch
+# X Patch
 
-> Four Morphe patches for X: **Copy media URL**, **Fix external post links**, **Hide Find more** and **Hide Who to follow**. They can be selected alongside [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches).
+One Morphe patch source, six selectable enhancements for X. **Keep your existing source:** update it; no need to add a second source.
 
-## Add to Morphe
+## Install or update
+Source: https://github.com/rikunode/tairiku-x-patches
 
-[**Add X Patch to Morphe (one tap)**](https://morphe.software/add-source?github=rikunode/tairiku-x-patches)
+Stable version: 1.12.2-x.1 · 6 patches · X **12.31.0-prod.01** / **12.32.0-prod.01**.
 
-Or paste this public repository into Morphe Manager's remote patch-source field:
+| Patch | Function |
+|---|---|
+| Fix external post links | Open linked posts without requiring Home / For You |
+| Hide Find more | Hide Discover more recommendations |
+| Hide Who to follow | Hide follow recommendations |
+| Hide sports scores | Suppress sports ScoreCard tiles and live-game pills (experimental behavior) |
+| Hide search relevance prompt | Hide yes/no relevance feedback card in X Search (experimental behavior) |
+| Copy media URL | Copy direct image/video/GIF URLs from post options, and from video download action (Android UI not verified) |
 
-https://github.com/rikunode/tairiku-x-patches
+All six can be selected for **the same X version** in one patching run. The last two filters have been merged from the earlier five-patch beta without removing the existing URL copy patch.
+The image long-press and photo-viewer three-dot copy action are not implemented yet. Do not claim them as working.
 
-The public source provides [patches-bundle.json](patches-bundle.json) and [patches-list.json](patches-list.json) at the repository root, with a downloadable `.mpp` in the [stable X Patch release](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.3).
+**Prerelease toggle:** Morphe compares stable and dev manifests and chooses the newer version. This stable 1.12.2-x.1 is newer than the old dev `1.12.1-tairiku.4-beta.4`; switching the toggle off is not needed to get the latest unified version.
 
-## Stable external-post-link fix (v1.12.0-tairiku.3)
+**Display name:** X Patch. If the source has a custom local name, change it using the pencil icon in Morphe.
 
-The stable source now includes the **Fix external post links** patch, which routes
-recognized external post URLs directly into X's post-detail navigation rather
-than Home/For You. On 2026-10-12, the user confirmed on an actual Android phone
-that an external post opens directly with For You hidden. It retains the two
-recommendation filters. Tested for X 12.31.0-prod.01 and 12.32.0-prod.01.
+## Verify
+`python3 scripts/test-morphe-metadata.py`, `bash scripts/test-recommendation-filter.sh` and `./gradlew :patches:buildAndroid :patches:test` validate metadata, Java fixtures, and the patch bundle. Full patch application requires a compatible X APK; actual UI should be tested on an Android device.
 
-Use the **same existing stable source URL above**; refresh it to see all three
-patches. You do not need to add another source.
-
-**Retire the duplicate beta source** in Morphe after refreshing the stable source;
-otherwise overlapping patch names can conflict. Keep Ahmed Yarub's separate source
-for its features. Select the stable **Fix external post links** patch with any of
-the other X Patch patches, rebuild and install. Existing APKs do not update simply
-because the remote source changes. The earlier `v1.12.0-tairiku.2` stable Release and
-`v1.12.0-tairiku.3-rc.1` pre-release remain archived for recovery.
-
-## ❓ About
-
-Patches built with [Morphe Patcher](https://github.com/MorpheApp/morphe-patcher) for apps I
-use. Each patch is developed against a specific, decompiled APK version, and only versions
-that have actually been verified are declared as compatible.
-
-### How to use these patches
-
-Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source, and select whichever of the four X Patch patches you want from this source.
-
-## 🩹 Patches list
-
-<!-- PATCHES_START EXPANDED -->
-> **[v1.12.1-x.2](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.1-x.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;4 patches total
-<details open>
-<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
-<br>
-
-**🎯 Supported versions:** 12.31.0-prod.01 / 12.32.0-prod.01
-
-| 💊&nbsp;Patch | 📜&nbsp;Description |
-|----------|----------------|
-| Copy media URL | Copies direct image/video/GIF URLs from post options, and adds Save video / Copy media URL choices to the video downloader action. *Image-viewer overflow and image long-press menus are not yet supported; Android verification is pending.* |
-| Fix external post links | Opens X post links directly without requiring a visible For You tab. |
-| Hide Find more | Hides Discover more / もっと見つける recommendations below posts and in Search. |
-| Hide Who to follow | Hides recommended accounts from timelines. |
-
-</details>
-
-<!-- PATCHES_END -->
-
-&nbsp;
-
-## 🚀 Building
-
-The Morphe patches Gradle plugin is published to GitHub Packages, so a GitHub token with
-`read:packages` is required to build:
-
-```sh
-GITHUB_ACTOR=<username> GITHUB_TOKEN=<token> ./gradlew build
-```
-
-Or put `gpr.user` and `gpr.key` in `~/.gradle/gradle.properties`.
-
-## 🧪 Testing
-
-`./gradlew :patches:test` checks the bundle itself and runs on every pull request.
-
-The patches only mean something against the app builds they target, so the main tests apply
-them to real APKs, which are not in the repository:
-
-```sh
-./gradlew :patches:apkTest -Pmorphe.apks=x=<X base.apk or .apkm>
-```
-
-This applies every patch for each app and fails when a patch throws, when a fingerprint
-matches anything but exactly one method, or when patched code refers to a method or field
-that does not exist. Add `-Pmorphe.isolated=true` to also apply each patch on its own, which
-catches a patch that only works because another one was selected with it.
-
-The patched APKs are left in `patches/build/patched`. `scripts/verify-dex.sh` runs ART's
-verifier over one on a rooted emulator, which catches register and type mistakes that only
-fail when the app loads the class.
-
-## 📜 License
-
-GNU General Public License v3.0. See [LICENSE](LICENSE).
+## License
+GNU GPLv3 — see LICENSE.
