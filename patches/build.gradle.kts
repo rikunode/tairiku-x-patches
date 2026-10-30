@@ -1,4 +1,4 @@
-group = "app.tairiku"
+group = "app.xpatch"
 
 // This custom source intentionally publishes only the four Tairiku X patches. The Ahmed
 // sources stay in the repository for reference/upstream sync but are not compiled into this bundle.
@@ -21,10 +21,10 @@ sourceSets.named("main") {
 
 patches {
     about {
-        name = "Tairiku X Patches"
+        name = "X Patch"
         description = "Optional X recommendation, sports-score, and external post link fixes for use alongside Ahmed Yarub's Patches"
         source = "https://github.com/rikunode/tairiku-x-patches"
-        author = "Tairiku"
+        author = "X Patch Contributors"
         contact = "https://github.com/rikunode/tairiku-x-patches"
         website = "https://github.com/rikunode/tairiku-x-patches"
         license = "GPLv3"
