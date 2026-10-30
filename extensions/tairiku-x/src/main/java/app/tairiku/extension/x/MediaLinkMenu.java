@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  */
 @SuppressWarnings("unused")
 public final class MediaLinkMenu {
-    private static final String ACTION_NAME = "PromotedCopyLinkTo";
+    private static final String ACTION_NAME = "ViewDebugDialog";
     private static final Pattern MEDIA_START = Pattern.compile("(?=MediaContent(?:Video|Gif|Image)\\()");
     private static final Pattern VARIANT = Pattern.compile(
         "MediaVariant\\(url=(https://[^,\\s)]+), bitRate=(\\d+|null), contentType=([^)]+)\\)");
