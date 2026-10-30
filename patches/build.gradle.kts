@@ -1,6 +1,6 @@
-group = "app.tairiku"
+group = "app.xpatch"
 
-// This custom source intentionally publishes only the three Tairiku X patches. The Ahmed
+// This custom source publishes only its targeted X patches. The Ahmed
 // sources stay in the repository for reference/upstream sync but are not compiled into this bundle.
 kotlin.sourceSets.named("main") {
     kotlin.setSrcDirs(listOf("src/minimal/kotlin", "src/main/kotlin/util"))
@@ -21,10 +21,10 @@ sourceSets.named("main") {
 
 patches {
     about {
-        name = "Tairiku X Patches"
-        description = "Two X recommendation filters plus optional external post link repair for use alongside Ahmed Yarub's Patches"
+        name = "X Patch"
+        description = "X interface improvements and media URL copying; compatible with Ahmed Yarub's Patches"
         source = "https://github.com/rikunode/tairiku-x-patches"
-        author = "Tairiku"
+        author = "X Patch Contributors"
         contact = "https://github.com/rikunode/tairiku-x-patches"
         website = "https://github.com/rikunode/tairiku-x-patches"
         license = "GPLv3"
