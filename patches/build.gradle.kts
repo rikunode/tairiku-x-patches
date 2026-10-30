@@ -1,4 +1,4 @@
-group = "app.legacy"
+group = "app.xpatch"
 
 // This custom source intentionally publishes only the four Legacy X patches. The Ahmed
 // sources stay in the repository for reference/upstream sync but are not compiled into this bundle.
@@ -21,10 +21,10 @@ sourceSets.named("main") {
 
 patches {
     about {
-        name = "Legacy X Patches"
+        name = "X Patch"
         description = "Optional X recommendation, sports-score, and external post link fixes for use alongside Ahmed Yarub's Patches"
         source = "https://github.com/rikunode/x-feed-cleanup-patches"
-        author = "Legacy"
+        author = "X Patch Contributors"
         contact = "https://github.com/rikunode/x-feed-cleanup-patches"
         website = "https://github.com/rikunode/x-feed-cleanup-patches"
         license = "GPLv3"
