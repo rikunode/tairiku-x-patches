@@ -1,16 +1,16 @@
 # 🧩 X Patch
 
-> Three Morphe patches for X: **Fix external post links**, **Hide Find more** and **Hide Who to follow**. They can be selected alongside [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches).
+> Four Morphe patches for X: **Copy media URL**, **Fix external post links**, **Hide Find more** and **Hide Who to follow**. They can be selected alongside [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches).
 
 ## Add to Morphe
 
-[**Add Tairiku X Patches to Morphe (one tap)**](https://morphe.software/add-source?github=rikunode/tairiku-x-patches)
+[**Add X Patch to Morphe (one tap)**](https://morphe.software/add-source?github=rikunode/tairiku-x-patches)
 
 Or paste this public repository into Morphe Manager's remote patch-source field:
 
 https://github.com/rikunode/tairiku-x-patches
 
-The public source provides [patches-bundle.json](patches-bundle.json) and [patches-list.json](patches-list.json) at the repository root, with a downloadable `.mpp` in the [stable v1.12.0-tairiku.3 release](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.3).
+The public source provides [patches-bundle.json](patches-bundle.json) and [patches-list.json](patches-list.json) at the repository root, with a downloadable `.mpp` in the [stable X Patch release](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.3).
 
 ## Stable external-post-link fix (v1.12.0-tairiku.3)
 
@@ -26,7 +26,7 @@ patches. You do not need to add another source.
 **Retire the duplicate beta source** in Morphe after refreshing the stable source;
 otherwise overlapping patch names can conflict. Keep Ahmed Yarub's separate source
 for its features. Select the stable **Fix external post links** patch with any of
-the other Tairiku patches, rebuild and install. Existing APKs do not update simply
+the other X Patch patches, rebuild and install. Existing APKs do not update simply
 because the remote source changes. The earlier `v1.12.0-tairiku.2` stable Release and
 `v1.12.0-tairiku.3-rc.1` pre-release remain archived for recovery.
 
@@ -38,12 +38,12 @@ that have actually been verified are declared as compatible.
 
 ### How to use these patches
 
-Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source, and select whichever of the three Tairiku patches you want from this source.
+Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source, and select whichever of the four X Patch patches you want from this source.
 
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.12.1-x.1](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.1-x.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;4 patches total
+> **[v1.12.1-x.2](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.1-x.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;4 patches total
 <details open>
 <summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
 <br>
@@ -52,7 +52,7 @@ Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source,
 
 | 💊&nbsp;Patch | 📜&nbsp;Description |
 |----------|----------------|
-| Copy media URL | Copies direct image, video, and GIF URLs from a post's options menu. *The media viewer/long-press menu is not yet supported.* |
+| Copy media URL | Copies direct image/video/GIF URLs from post options, and adds Save video / Copy media URL choices to the video downloader action. *Image-viewer overflow and image long-press menus are not yet supported; Android verification is pending.* |
 | Fix external post links | Opens X post links directly without requiring a visible For You tab. |
 | Hide Find more | Hides Discover more / もっと見つける recommendations below posts and in Search. |
 | Hide Who to follow | Hides recommended accounts from timelines. |
