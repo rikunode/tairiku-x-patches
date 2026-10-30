@@ -43,21 +43,19 @@ Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source,
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.12.0-tairiku.3](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.0-tairiku.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;3 patches total
+> **[v1.12.1-x.1](https://github.com/rikunode/tairiku-x-patches/releases/tag/v1.12.1-x.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;4 patches total
 <details open>
-<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
+<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
 <br>
 
-**🎯 Supported versions:**
+**🎯 Supported versions:** 12.31.0-prod.01 / 12.32.0-prod.01
 
-| 12.31.0-prod.01 | 12.32.0-prod.01 |
-| :---: | :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| [Fix external post links](#fix-external-post-links) | Opens external X post URLs directly, preserving a hidden For You tab. |  |
-| [Hide Find more](#hide-find-more) | Hides Discover more / もっと見つける under posts and top people recommendations in Search. |  |
-| [Hide Who to follow](#hide-who-to-follow) | Hides Who to follow / recommended-account modules from timelines. |  |
+| 💊&nbsp;Patch | 📜&nbsp;Description |
+|----------|----------------|
+| Copy media URL | Copies direct image, video, and GIF URLs from a post's options menu. *The media viewer/long-press menu is not yet supported.* |
+| Fix external post links | Opens X post links directly without requiring a visible For You tab. |
+| Hide Find more | Hides Discover more / もっと見つける recommendations below posts and in Search. |
+| Hide Who to follow | Hides recommended accounts from timelines. |
 
 </details>
 
