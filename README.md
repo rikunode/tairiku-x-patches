@@ -1,4 +1,4 @@
-# 🧩 Tairiku X Patches
+# 🧩 X Patch
 
 > Three Morphe patches for X: **Fix external post links**, **Hide Find more** and **Hide Who to follow**. They can be selected alongside [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches).
 
