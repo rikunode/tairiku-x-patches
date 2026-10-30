@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.12.1-x.1",
+  "version": "1.12.1-x.2",
   "patches": [
     {
       "name": "Fix external post links",
@@ -106,7 +106,7 @@
     },
     {
       "name": "Copy media URL",
-      "description": "Copies direct photo, video, and GIF URLs from a post's options menu.",
+      "description": "Copy direct image/video/GIF URLs from post options or from the video player's download action.",
       "default": true,
       "category": null,
       "dependencies": [],
