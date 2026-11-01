@@ -22,7 +22,7 @@ jobs:
       packages: read
     steps:
       - name: Checkout the feature branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
