@@ -24,7 +24,7 @@ The `Hide sports scores` extension tests precisely the `w1.a -> d0.a -> o` chain
 
 The user authorized a public experimental prerelease before on-device confirmation. Morphe Manager's JsonPatchBundle switches the original source URL from `main/patches-bundle.json` to `dev/patches-bundle.json` when **Use pre-release patches** is enabled. It compares the two versions and picks the newer; consequently `1.12.1-legacy.4-beta.1` has a higher numeric base than stable `1.12.0-legacy.3` and wins the comparison.
 
-Existing Legacy source remains: `https://raw.githubusercontent.com/rikunode/x-feed-cleanup-patches/main/patches-bundle.json`. Beta manifest: `https://raw.githubusercontent.com/rikunode/x-feed-cleanup-patches/dev/patches-bundle.json`.
+Existing stable source remains: `https://raw.githubusercontent.com/rikunode/x-feed-cleanup-patches/main/patches-bundle.json`. Beta manifest: `https://raw.githubusercontent.com/rikunode/x-feed-cleanup-patches/dev/patches-bundle.json`.
 
 Switch the source back to stable by turning **Use pre-release patches** off. No separate source install, disable, or reconfiguration is necessary.
 
