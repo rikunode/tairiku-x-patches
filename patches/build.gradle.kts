@@ -11,11 +11,11 @@ sourceSets.named("main") {
     java.setSrcDirs(emptyList<String>())
     // Morphe loads multiple patch bundles through one class loader. Ahmed's selected X patches can
     // resolve extension resources through this bundle first, so keep its shared + X extensions
-    // alongside our unique Legacy extension. They are resources, not selectable patches.
+    // alongside our unique add-on extension. They are resources, not selectable patches.
     resources.include(
         "extensions/shared.mpe",
         "extensions/x.mpe",
-        "extensions/legacy-x.mpe",
+        "extensions/feedcleanup-x.mpe",
     )
 }
 
@@ -23,10 +23,10 @@ patches {
     about {
         name = "X Patch"
         description = "X interface improvements and media URL copying; compatible with Ahmed Yarub's Patches"
-        source = "https://github.com/rikunode/x-feed-cleanup-patches"
+        source = "https://github.com/" + providers.gradleProperty("sourceRepository").get()
         author = "X Patch Contributors"
-        contact = "https://github.com/rikunode/x-feed-cleanup-patches"
-        website = "https://github.com/rikunode/x-feed-cleanup-patches"
+        contact = "https://github.com/" + providers.gradleProperty("sourceRepository").get()
+        website = "https://github.com/" + providers.gradleProperty("sourceRepository").get()
         license = "GPLv3"
     }
 }

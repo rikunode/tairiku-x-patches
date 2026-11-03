@@ -51,7 +51,7 @@ class CrossBundleCoexistenceTest {
                 val result = File(ApkPatching.buildDirectory, "tmp/cross-bundle-${case.label}.result")
                 ApkPatching.runInFreshJvm(
                     CrossBundleRunner::class.java.name,
-                    listOf(case.apk.path, case.ahmedBundle.path, case.legacyBundle.path, case.label, result.path),
+                    listOf(case.apk.path, case.ahmedBundle.path, case.addonBundle.path, case.label, result.path),
                 )
 
                 val lines = result.readLines()
@@ -76,7 +76,7 @@ class CrossBundleCoexistenceTest {
         val ahmed = File(ahmedPath)
         require(apk.isFile) { "Missing test APK: $apk" }
         require(ahmed.isFile) { "Missing Ahmed bundle: $ahmed" }
-        require(currentBundle.isFile) { "Missing Legacy bundle: $currentBundle" }
+        require(currentBundle.isFile) { "Missing add-on bundle: $currentBundle" }
         return Case(label, apk, ahmed, currentBundle)
     }
 
@@ -84,7 +84,7 @@ class CrossBundleCoexistenceTest {
         val label: String,
         val apk: File,
         val ahmedBundle: File,
-        val legacyBundle: File,
+        val addonBundle: File,
     )
 }
 
@@ -114,14 +114,14 @@ object CrossBundleRunner {
             "Show sensitive media",
         )
 
-    private val LEGACY_PATCHES = setOf("Hide Who to follow", "Hide Find more", "Copy media URL", "Hide sports scores", "Hide search relevance prompt")
-    private val SELECTED = AHMED_PATCHES + LEGACY_PATCHES
+    private val ADDON_PATCHES = setOf("Hide Who to follow", "Hide Find more", "Copy media URL", "Hide sports scores", "Hide search relevance prompt")
+    private val SELECTED = AHMED_PATCHES + ADDON_PATCHES
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val (apkPath, ahmedPath, legacyPath, label, resultPath) = args
+        val (apkPath, ahmedPath, addonPath, label, resultPath) = args
         val apk = File(apkPath)
-        val bundles = setOf(File(ahmedPath), File(legacyPath))
+        val bundles = setOf(File(ahmedPath), File(addonPath))
         val loaded = loadPatchesFromJar(bundles)
         val providers =
             loaded.mapNotNull { patch -> patch.name?.let { it to patch } }

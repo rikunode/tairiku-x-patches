@@ -1,4 +1,4 @@
-package app.legacy.extension.x;
+package app.xfeedcleanup.extension.x;
 
 import android.content.Intent;
 

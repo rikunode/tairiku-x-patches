@@ -29,8 +29,8 @@ sdk_jar = sdk_jars[0]  # Only android.content.Intent is referenced; any platform
 out = repo / "build/test-external-post-link"
 out.mkdir(parents=True, exist_ok=True)
 sources = [
-    repo / "extensions/legacy-x/src/main/java/app/legacy/extension/x/ExternalPostLink.java",
-    repo / "tests/java/app/legacy/extension/x/ExternalPostLinkTest.java",
+    repo / "extensions/feedcleanup-x/src/main/java/app/xfeedcleanup/extension/x/ExternalPostLink.java",
+    repo / "tests/java/app/xfeedcleanup/extension/x/ExternalPostLinkTest.java",
     repo / "tests/java/com/x/navigation/ni.java",
 ]
 subprocess.run(
@@ -40,6 +40,6 @@ subprocess.run(
 )
 subprocess.run(
     [java, "-cp", os.pathsep.join([str(out), str(sdk_jar)]),
-     "app.legacy.extension.x.ExternalPostLinkTest"],
+     "app.xfeedcleanup.extension.x.ExternalPostLinkTest"],
     check=True,
 )

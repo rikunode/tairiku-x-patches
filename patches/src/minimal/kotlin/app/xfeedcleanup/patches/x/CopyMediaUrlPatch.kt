@@ -1,4 +1,4 @@
-package app.legacy.patches.x
+package app.xfeedcleanup.patches.x
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
@@ -16,7 +16,7 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 
-private const val MEDIA_MENU = "Lapp/legacy/extension/x/MediaLinkMenu;"
+private const val MEDIA_MENU = "Lapp/xfeedcleanup/extension/x/MediaLinkMenu;"
 
 private object VideoDownloaderActionFingerprint : Fingerprint(
     definingClass = "Lcom/twitter/downloader/",

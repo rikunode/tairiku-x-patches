@@ -16,6 +16,9 @@ gradle = (root / "gradle.properties").read_text(encoding="utf-8")
 match = re.search(r"(?m)^version\s*=\s*(\S+)\s*$", gradle)
 assert match is not None, "gradle.properties must declare a version"
 build_version = match.group(1)
+slug = re.search(r"(?m)^sourceRepository\s*=\s*(\S+)\s*$", gradle)
+assert slug is not None, "gradle.properties must declare sourceRepository"
+repository = slug.group(1)
 assert patches["version"] == build_version, "Patches list and Gradle versions differ"
 
 beta = root / "patches-bundle-beta.json"
@@ -31,7 +34,7 @@ for filename in manifest_paths:
     parsed = urlparse(manifest["download_url"])
     assert parsed.scheme == "https" and parsed.netloc == "github.com", filename
     assert parsed.path == (
-        f"/rikunode/x-feed-cleanup-patches/releases/download/v{version}/patches-{version}.mpp"
+        f"/{repository}/releases/download/v{version}/patches-{version}.mpp"
     ), f"{filename.name}: download URL does not match version"
     assert isinstance(manifest.get("description"), str), filename
     assert manifest.get("signature_download_url") in (None, ""), filename

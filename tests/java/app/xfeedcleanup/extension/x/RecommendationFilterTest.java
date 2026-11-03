@@ -1,4 +1,4 @@
-package app.legacy.extension.x;
+package app.xfeedcleanup.extension.x;
 
 /** Dependency-free regression checks for X recommendation entry IDs. */
 public final class RecommendationFilterTest {
