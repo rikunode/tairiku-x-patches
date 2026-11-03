@@ -1,4 +1,4 @@
-# 🧩 Legacy X Patches
+# 🧩 X Feed Cleanup Patches
 
 > Three Morphe patches for X: **Fix external post links**, **Hide Find more** and **Hide Who to follow**. They can be selected alongside [Ahmed Yarub's Patches](https://github.com/ahmedyarub/morphe-patches).
 
@@ -22,7 +22,7 @@ patches. You do not need to add another source.
 **Retire the duplicate beta source** in Morphe after refreshing the stable source;
 otherwise overlapping patch names can conflict. Keep Ahmed Yarub's separate source
 for its features. Select the stable **Fix external post links** patch with any of
-the other Legacy patches, rebuild and install. Existing APKs do not update simply
+the other patches from this source, rebuild and install. Existing APKs do not update simply
 because the remote source changes. The earlier `v1.12.0-legacy.2` stable Release and
 `v1.12.0-legacy.3-rc.1` pre-release remain archived for recovery.
 
@@ -34,7 +34,7 @@ that have actually been verified are declared as compatible.
 
 ### How to use these patches
 
-Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source, and select whichever of the three Legacy patches you want from this source.
+Add this repository to Morphe, keep Ahmed Yarub's Patches as your main X source, and select whichever of the three patches you want from this source.
 
 ## 🩹 Patches list
 

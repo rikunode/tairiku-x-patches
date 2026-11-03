@@ -1,6 +1,6 @@
-group = "app.legacy"
+group = "app.xfeedcleanup"
 
-// This custom source intentionally publishes only the four Legacy X patches. The Ahmed
+// This custom source intentionally publishes only the four add-on X patches. The Ahmed
 // sources stay in the repository for reference/upstream sync but are not compiled into this bundle.
 kotlin.sourceSets.named("main") {
     kotlin.setSrcDirs(listOf("src/minimal/kotlin", "src/main/kotlin/util"))
@@ -11,22 +11,22 @@ sourceSets.named("main") {
     java.setSrcDirs(emptyList<String>())
     // Morphe loads multiple patch bundles through one class loader. Ahmed's selected X patches can
     // resolve extension resources through this bundle first, so keep its shared + X extensions
-    // alongside our unique Legacy extension. They are resources, not selectable patches.
+    // alongside our unique add-on extension. They are resources, not selectable patches.
     resources.include(
         "extensions/shared.mpe",
         "extensions/x.mpe",
-        "extensions/legacy-x.mpe",
+        "extensions/feedcleanup-x.mpe",
     )
 }
 
 patches {
     about {
-        name = "Legacy X Patches"
+        name = "X Feed Cleanup Patches"
         description = "Optional X recommendation, sports-score, and external post link fixes for use alongside Ahmed Yarub's Patches"
-        source = "https://github.com/rikunode/x-feed-cleanup-patches"
-        author = "Legacy"
-        contact = "https://github.com/rikunode/x-feed-cleanup-patches"
-        website = "https://github.com/rikunode/x-feed-cleanup-patches"
+        source = "https://github.com/" + providers.gradleProperty("sourceRepository").get()
+        author = "rikunode"
+        contact = "https://github.com/" + providers.gradleProperty("sourceRepository").get()
+        website = "https://github.com/" + providers.gradleProperty("sourceRepository").get()
         license = "GPLv3"
     }
 }

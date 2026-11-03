@@ -1,4 +1,4 @@
-package app.legacy.patches.x
+package app.xfeedcleanup.patches.x
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
@@ -11,7 +11,7 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 
-internal const val FILTER_CLASS = "Lapp/legacy/extension/x/RecommendationFilter;"
+internal const val FILTER_CLASS = "Lapp/xfeedcleanup/extension/x/RecommendationFilter;"
 
 private object CachedTimelineItemFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL),
@@ -33,9 +33,9 @@ private object StoreTimelineItemFingerprint : Fingerprint(
 )
 
 internal val recommendationFilterPatch = bytecodePatch(
-    description = "Injects the standalone Legacy recommendation filter.",
+    description = "Injects the standalone recommendation filter.",
 ) {
-    extendWith("extensions/legacy-x.mpe")
+    extendWith("extensions/feedcleanup-x.mpe")
 
     execute {
         StoreTimelineItemFingerprint.method.apply {

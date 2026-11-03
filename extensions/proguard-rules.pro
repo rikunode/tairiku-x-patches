@@ -10,7 +10,7 @@
 -keep class app.ahmedyarub.** {
   *;
 }
--keep class app.legacy.** {
+-keep class app.xfeedcleanup.** {
   *;
 }
 -keep class com.google.** {

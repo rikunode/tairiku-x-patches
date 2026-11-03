@@ -1,4 +1,4 @@
-package app.legacy.extension.x;
+package app.xfeedcleanup.extension.x;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

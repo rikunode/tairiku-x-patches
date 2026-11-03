@@ -1,6 +1,6 @@
 package app.ahmedyarub.patches.harness
 
-import app.legacy.patches.x.recommendationFilterPatch
+import app.xfeedcleanup.patches.x.recommendationFilterPatch
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.Patcher
 import app.morphe.patcher.PatcherConfig
@@ -32,7 +32,7 @@ internal object FingerprintAudit {
      */
     private val FINGERPRINT_PACKAGES =
         mapOf(
-            "com.twitter.android" to listOf("app/legacy/patches/x/"),
+            "com.twitter.android" to listOf("app/xfeedcleanup/patches/x/"),
         )
 
     @JvmStatic
@@ -45,7 +45,7 @@ internal object FingerprintAudit {
             val packageName = patcher.context.packageMetadata.packageName
 
             val audit = bytecodePatch(description = "Fingerprint audit") {
-                // Extension fingerprints resolve only after the standalone Legacy extension is merged.
+                // Extension fingerprints resolve only after the standalone add-on extension is merged.
                 if (packageName == "com.twitter.android") dependsOn(recommendationFilterPatch)
 
                 execute {

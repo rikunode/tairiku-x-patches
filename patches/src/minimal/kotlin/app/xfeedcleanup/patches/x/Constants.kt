@@ -1,4 +1,4 @@
-package app.legacy.patches.x
+package app.xfeedcleanup.patches.x
 
 import app.morphe.patcher.patch.ApkFileType
 import app.morphe.patcher.patch.AppTarget

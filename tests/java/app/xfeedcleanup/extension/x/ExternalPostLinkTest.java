@@ -1,4 +1,4 @@
-package app.legacy.extension.x;
+package app.xfeedcleanup.extension.x;
 
 import com.x.navigation.ni;
 import java.util.List;

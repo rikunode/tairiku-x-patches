@@ -25,7 +25,7 @@ class BundleTest {
             "Upstream Ahmed patch classes leaked into the add-on bundle",
         )
         assertEquals(
-            setOf("extensions/shared.mpe", "extensions/x.mpe", "extensions/legacy-x.mpe"),
+            setOf("extensions/shared.mpe", "extensions/x.mpe", "extensions/feedcleanup-x.mpe"),
             entries.filter { it.startsWith("extensions/") && it.endsWith(".mpe") }.toSet(),
         )
     }
@@ -40,7 +40,7 @@ class BundleTest {
         // The libraries bundled in the .mpp carry patches of their own, which are theirs to prune.
         val unreachable =
             Bundle.declaredPatches
-                .filterKeys { it.startsWith("app.legacy.") }
+                .filterKeys { it.startsWith("app.xfeedcleanup.") }
                 .filterValues { it.name == null && it !in reachable }
                 .keys
                 .sorted()

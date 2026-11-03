@@ -1,4 +1,4 @@
-package app.legacy.patches.x
+package app.xfeedcleanup.patches.x
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
@@ -7,7 +7,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.util.returnEarly
 
-private const val EXTERNAL_POST_LINK_CLASS = "Lapp/legacy/extension/x/ExternalPostLink;"
+private const val EXTERNAL_POST_LINK_CLASS = "Lapp/xfeedcleanup/extension/x/ExternalPostLink;"
 
 /** X's native detail destination, identified semantically instead of by obfuscated class name. */
 private object PostFromIdFingerprint : Fingerprint(
